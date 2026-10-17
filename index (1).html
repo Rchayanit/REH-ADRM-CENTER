@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>β-lactam Cross-reactivity Checker</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--text:#1d2430;--mute:#5d6878;--line:#dde2ea;--accent:#1d6fb8;
+--hi:#c62828;--hib:#fdeaea;--mo:#b26a00;--mob:#fff3e0;--lo:#2e7d32;--lob:#e8f5e9;--no:#455a64;--nob:#eceff1;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161c;--card:#1b212a;--text:#e6eaf0;--mute:#9aa6b6;--line:#2f3846;--accent:#6db3f2;
+--hi:#ff8a80;--hib:#3a1d1d;--mo:#ffb74d;--mob:#3a2b12;--lo:#81c784;--lob:#1a2f1d;--no:#b0bec5;--nob:#252d36;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12161c;--card:#1b212a;--text:#e6eaf0;--mute:#9aa6b6;--line:#2f3846;--accent:#6db3f2;
+--hi:#ff8a80;--hib:#3a1d1d;--mo:#ffb74d;--mob:#3a2b12;--lo:#81c784;--lob:#1a2f1d;--no:#b0bec5;--nob:#252d36;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Sarabun","Noto Sans Thai",system-ui,sans-serif;line-height:1.55}
+main{max-width:820px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font-size:1.3rem;margin:0 0 4px}
+.sub{color:var(--mute);font-size:.9rem;margin:0}
+.lang button{border:1px solid var(--line);background:var(--card);color:var(--text);padding:6px 12px;cursor:pointer;font:inherit}
+.lang button:first-child{border-radius:8px 0 0 8px}.lang button:last-child{border-radius:0 8px 8px 0;border-left:0}
+.lang button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px}
+.warn{background:var(--mob);color:var(--text);border-left:4px solid var(--mo);font-size:.88rem}
+input[type=search]{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;font-size:.88rem}
+.chip.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+label.sev{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:.9rem}
+.res{border-radius:10px;padding:10px 12px;margin-top:8px;border-left:5px solid}
+.res b{display:block}.res small{color:var(--mute)}
+.hi{background:var(--hib);border-color:var(--hi)}.mo{background:var(--mob);border-color:var(--mo)}
+.lo{background:var(--lob);border-color:var(--lo)}.no{background:var(--nob);border-color:var(--no)}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:6px}
+.hi .tag{color:var(--hi)}.mo .tag{color:var(--mo)}.lo .tag{color:var(--lo)}.no .tag{color:var(--no)}
+h2{font-size:1rem;margin:0 0 4px}
+.ref{font-size:.8rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><h1 id="t"></h1><p class="sub" id="st"></p></div>
+<div class="lang"><button id="bth">ไทย</button><button id="ben">EN</button></div>
+</header>
+<div class="card warn" id="disc"></div>
+<div class="card">
+<h2 id="h1s"></h2>
+<input type="search" id="q">
+<div class="sugg" id="list"></div>
+<label class="sev"><input type="checkbox" id="sev"><span id="sevt"></span></label>
+</div>
+<div class="card"><h2 id="h2s"></h2><div id="out"></div></div>
+<p class="ref" id="ref"></p>
+</main>
+<script>
+// group: R1 side-chain group. A = amoxicillin-like, B = ampicillin-like, C = ceftriaxone-like (methoxyimino), D = ceftazidime-like
+var D=[
+["penG","เพนิซิลลิน จี","Penicillin G","P",""],["penV","เพนิซิลลิน วี","Penicillin V","P",""],
+["amox","อะม็อกซีซิลลิน (± คลาวูลาเนต)","Amoxicillin (± clavulanate)","P","A"],["amp","แอมพิซิลลิน","Ampicillin","P","B"],
+["pip","พิเพอราซิลลิน (± ทาโซแบคแทม)","Piperacillin (± tazobactam)","P",""],["clox","คล็อกซาซิลลิน / ไดคล็อกซาซิลลิน","Cloxacillin / Dicloxacillin","P",""],
+["cfz","เซฟาโซลิน","Cefazolin","C0",""],["cex","เซฟาเลกซิน","Cephalexin","C0","B"],["cfd","เซฟาดรอกซิล","Cefadroxil","C0","A"],
+["cfc","เซฟาคลอร์","Cefaclor","C0","B"],["cfp","เซฟโพรซิล","Cefprozil","C0","A"],["cfu","เซฟูร็อกซิม","Cefuroxime","C0","C"],
+["cro","เซฟไตรอะโซน","Ceftriaxone","C0","C"],["ctx","เซโฟแทกซิม","Cefotaxime","C0","C"],["cpd","เซฟโพโดซิม","Cefpodoxime","C0","C"],
+["fep","เซฟีพีม","Cefepime","C0","C"],["caz","เซฟตาซิดีม","Ceftazidime","C0","D"],["cfx","เซฟิซิม","Cefixime","C0","D"],
+["mem","เมโรพีเนม","Meropenem","CP",""],["imi","อิมิพีเนม","Imipenem","CP",""],["ert","เออร์ทาพีเนม","Ertapenem","CP",""],
+["atm","อซตรีโอนัม","Aztreonam","M","D"]
+].map(function(r){return{id:r[0],th:r[1],en:r[2],cls:r[3],g:r[4]}});
+var CL={P:["เพนิซิลลิน","Penicillin"],C0:["เซฟาโลสปอริน","Cephalosporin"],CP:["คาร์บาพีเนม","Carbapenem"],M:["โมโนแบคแทม","Monobactam"]};
+var L={th:{t:"ตรวจสอบ Cross-reactivity ของยากลุ่ม β-lactam",st:"เลือกยาที่ผู้ป่วยแพ้ แล้วดูยาที่อาจแพ้ข้ามกลุ่ม",
+disc:"⚠ ต้นแบบเพื่อการสาธิต ยังไม่ผ่านการตรวจสอบโดยเภสัชกร/แพทย์ ใช้เป็นเครื่องมือช่วยตัดสินใจสำหรับบุคลากรทางการแพทย์เท่านั้น ไม่ใช่การวินิจฉัย และไม่ควรใช้แทนการประเมินผู้ป่วยรายบุคคลหรือการทดสอบภูมิแพ้ยา",
+h1:"1. เลือกยาที่ผู้ป่วยแพ้",h2:"2. ผลการประเมิน",ph:"ค้นหาชื่อยา (ไทย/อังกฤษ)",
+sev:"ประวัติแพ้รุนแรงแบบล่าช้า (SJS/TEN, DRESS, ไตอักเสบจากภูมิแพ้ ฯลฯ) – ควรหลีกเลี่ยงยาทั้งกลุ่มและปรึกษาผู้เชี่ยวชาญ",
+empty:"ยังไม่ได้เลือกยา",hi:"ความเสี่ยงสูง",mo:"ปานกลาง",lo:"ต่ำ",no:"แทบไม่พบ",
+r_same:"โครงสร้างข้างสาย R1 เหมือนกัน",r_sim:"โครงสร้างข้างสาย R1 คล้ายกัน",r_pen:"เป็นกลุ่มเพนิซิลลินด้วยกัน (วงแหวน β-lactam และแกนเดียวกัน) ควรหลีกเลี่ยง",
+r_cep:"R1 ต่างกัน โอกาสแพ้ข้ามต่ำ (โดยทั่วไปน้อยกว่า ~2%)",r_carb:"โอกาสแพ้ข้ามกับคาร์บาพีเนมต่ำ (โดยทั่วไปน้อยกว่า 1%)",r_atm:"อซตรีโอนัมไม่แพ้ข้ามกับ β-lactam อื่น ยกเว้นเซฟตาซิดีมและเซฟิซิม",
+r_sev:"แพ้รุนแรงแบบล่าช้า: หลีกเลี่ยงทั้งกลุ่ม β-lactam จนกว่าผู้เชี่ยวชาญประเมิน",
+ref:"อ้างอิงหลัก: Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018 (ข้อมูลตัวอย่าง ต้องตรวจทานก่อนใช้จริง)"},
+en:{t:"β-lactam Cross-reactivity Checker",st:"Select the drugs the patient is allergic to and see possible cross-reactive drugs",
+disc:"⚠ Demonstration prototype, not yet reviewed by a pharmacist or physician. A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.",
+h1:"1. Select the culprit drug(s)",h2:"2. Assessment",ph:"Search drug name (Thai/English)",
+sev:"History of severe delayed reaction (SJS/TEN, DRESS, allergic nephritis, etc.): avoid the whole class and consult a specialist",
+empty:"No drug selected yet",hi:"High risk",mo:"Moderate",lo:"Low",no:"Negligible",
+r_same:"Identical R1 side chain",r_sim:"Similar R1 side chain",r_pen:"Both penicillins (shared β-lactam ring and core): avoid",
+r_cep:"Dissimilar R1; cross-reactivity is low (generally under ~2%)",r_carb:"Cross-reactivity with carbapenems is low (generally under 1%)",r_atm:"Aztreonam does not cross-react with other β-lactams, except ceftazidime and cefixime",
+r_sev:"Severe delayed reaction: avoid all β-lactams until assessed by a specialist",
+ref:"Main references: Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018. (Sample data; review before real use.)"}};
+var lang="en",sel=[],RK={no:0,lo:1,mo:2,hi:3};
+function rule(a,t){
+ if(a.g&&a.g===t.g)return["hi","r_same"];
+ if(a.g&&t.g&&((a.g==="A"&&t.g==="B")||(a.g==="B"&&t.g==="A")))return["mo","r_sim"];
+ if(a.cls==="P"&&t.cls==="P")return["hi","r_pen"];
+ if(a.cls==="M"||t.cls==="M")return["no","r_atm"];
+ if(a.cls==="CP"||t.cls==="CP")return["lo","r_carb"];
+ return["lo","r_cep"];}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+function render(){
+ var T=L[lang],i=lang==="th"?0:1,qv=document.getElementById("q").value.toLowerCase();
+ document.documentElement.lang=lang;
+ ["t","st","disc","h1s","h2s","sevt","ref"].forEach(function(k){var m={t:"t",st:"st",disc:"disc",h1s:"h1",h2s:"h2",sevt:"sev",ref:"ref"};document.getElementById(k).textContent=T[m[k]]});
+ document.getElementById("q").placeholder=T.ph;
+ document.getElementById("bth").className=lang==="th"?"on":"";document.getElementById("ben").className=lang==="en"?"on":"";
+ document.getElementById("list").innerHTML=D.filter(function(d){return !qv||(d.th+d.en).toLowerCase().indexOf(qv)>-1}).map(function(d){
+  return '<button class="chip'+(sel.indexOf(d.id)>-1?" sel":"")+'" data-id="'+d.id+'">'+esc(i?d.en:d.th)+'</button>'}).join("");
+ var out=document.getElementById("out");
+ if(!sel.length){out.innerHTML='<p class="sub">'+T.empty+'</p>';return}
+ var A=D.filter(function(d){return sel.indexOf(d.id)>-1}),sev=document.getElementById("sev").checked;
+ var rows=D.filter(function(d){return sel.indexOf(d.id)<0}).map(function(t){
+  var best=["no",null],why=[];
+  A.forEach(function(a){var r=rule(a,t);if(RK[r[0]]>RK[best[0]])best=r});
+  if(sev)best=["hi","r_sev"];
+  return{t:t,lv:best[0],rs:best[1]}}).sort(function(x,y){return RK[y.lv]-RK[x.lv]});
+ out.innerHTML=rows.map(function(r){
+  return '<div class="res '+r.lv+'"><b>'+esc(i?r.t.en:r.t.th)+'<span class="tag">'+T[r.lv]+'</span></b><small>'+CL[r.t.cls][i]+' · '+T[r.rs]+'</small></div>'}).join("");
+}
+document.getElementById("list").addEventListener("click",function(e){var id=e.target.getAttribute("data-id");if(!id)return;
+ var k=sel.indexOf(id);if(k>-1)sel.splice(k,1);else sel.push(id);render()});
+document.getElementById("q").addEventListener("input",render);
+document.getElementById("sev").addEventListener("change",render);
+document.getElementById("bth").onclick=function(){lang="th";render()};
+document.getElementById("ben").onclick=function(){lang="en";render()};
+render();
+</script>
+</body>
+</html>
