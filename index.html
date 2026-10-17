@@ -45,7 +45,7 @@ h2{font-size:1rem;margin:0 0 4px}
 <div><h1 id="t"></h1><p class="sub" id="st"></p></div>
 
 </header>
-<div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button></div>
+<div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button><button id="tfq"></button><button id="tmr"></button><button id="ths"></button><button id="tst"></button></div>
 <div class="card warn" id="disc"></div>
 <div class="card">
 <h2 id="h1s"></h2>
@@ -158,6 +158,56 @@ r_sa:'Shares the arylamine group and N1 ring (or is the same group): avoid',r_sd
 r_sn:'Lacks the arylamine and N1 ring responsible for allergy; no clear cross-reactivity shown (often explained by the patient general tendency to drug allergy)',r_snsn:'No consistent cross-reactivity between non-antibiotic sulfonamides; monitor',
 r_sev4:'Prior severe reaction: no clear cross-reactivity evidence, but consider alternatives or specialist advice before use',r_sev4b:'Prior severe reaction: avoid and consult a specialist',
 ref4:'Main references: Strom BL et al. N Engl J Med 2003 (sulfonamide antibiotics vs non-antibiotic sulfonamides); Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022 (sample data; review before real use)'});
+var SRC='Source: allergy management algorithm from the Drug and Poison Information Center, Pharmacy Department, Suratthani Hospital (rev. 1, Nov 2021): a concept for safely managing suspected drug allergy without losing treatment options, not an official practice guideline. ';
+function mk(map,pfx){var o=[];Object.keys(map).forEach(function(c){map[c].split('|').forEach(function(n,i){o.push({id:pfx+c+i,th:n,en:n,cls:c,g:''})})});return o}
+var FQ=mk({Q1:'Nalidixic acid|Cinoxacin',Q2:'Norfloxacin|Ciprofloxacin|Levofloxacin|Ofloxacin|Lomefloxacin',Q3:'Sparfloxacin|Gatifloxacin|Grepafloxacin|Pefloxacin',Q4:'Moxifloxacin|Trovafloxacin|Gemifloxacin|Sitafloxacin'},'q');
+var MR=mk({MP:'Eperisone|Tolperisone',ME:'Orphenadrine'},'m');
+var HS=mk({HAL:'Brompheniramine:1|Chlorpheniramine:1|Dexchlorpheniramine:1|Pheniramine:1|Dimethindene:1|Triprolidine:1|Acrivastine:3',HET:'Carbinoxamine:1|Clemastine:1|Dimenhydrinate:1|Diphenhydramine:1|Doxylamine:1',HED:'Antazoline:1|Pyrilamine:1|Tripelenamine:1',HPH:'Promethazine:1|Mequitazine:1|Trimeprazine:1',HPZ:'Buclizine:1|Cyclizine:1|Meclizine:1|Oxatomide:1|Hydroxyzine:1|Cetirizine:2|Levocetirizine:3',HPD:'Azatadine:1|Ketotifen:1|Cyproheptadine:1|Loratadine:2|Ebastine:2|Terfenadine:2|Levocabastine:2|Mizolastine:2|Rupatadine:3|Desloratadine:3|Bilastine:3|Fexofenadine:3'},'h');
+HS.forEach(function(d){var p=d.th.split(':');d.th=p[0];d.en=p[0]+' ('+['','1st gen','2nd gen','3rd gen'][+p[1]]+')'});
+var ST=mk({CA:'Hydrocortisone|Hydrocortisone acetate|Methylprednisolone|Prednisone|Prednisolone|Prednisolone acetate|Prednisolone caproate|Fludrocortisone acetate|Tixocortol pivalate|Cortisone acetate',CB:'Budesonide|Triamcinolone|Triamcinolone acetonide|Desonide|Fluocinonide|Fluocinolone acetonide|Amcinonide|Flunisolide|Halcinonide',CC:'Betamethasone|Dexamethasone|Desoxymethasone|Desoximetasone|Fluocortolone|Fluocortolone and esters|Halomethasone|Fluprednidene acetate|Fluticasone',CD1:'Beclomethasone dipropionate|Betamethasone dipropionate|Betamethasone-17-valerate|Clobetasol propionate|Clobetasone butyrate|Diflorasone diacetate|Mometasone furoate|Fluticasone propionate|Diflucortolone valerate|Alclometasone-17,21-dipropionate',CD2:'Methylprednisolone aceponate|Hydrocortisone valerate|Hydrocortisone-17-butyrate|Hydrocortisone-17-buteprate|Hydrocortisone-17-aceponate|Prednicarbate'},'s');
+var CLN={Q1:'First generation',Q2:'Second generation',Q3:'Third generation',Q4:'Fourth generation',MP:'Piperidine type',ME:'Ethanolamine type',HAL:'Alkylamine',HET:'Ethanolamine',HED:'Ethylenediamine',HPH:'Phenothiazine',HPZ:'Piperazine',HPD:'Piperidine',CA:'Group A (hydrocortisone type)',CB:'Group B (triamcinolone acetonide type)',CC:'Group C (betamethasone type)',CD1:'Group D1 (betamethasone dipropionate type)',CD2:'Group D2 (methylprednisolone aceponate type)'};
+Object.keys(CLN).forEach(function(k){CL[k]=[CLN[k],CLN[k]]});
+function rule5(a,t){return document.getElementById('sev').checked?['hi','r_fq_sev']:['mo','r_fq_mild']}
+function rule6(a,t){var x=document.getElementById('sev').checked;
+ if(a.cls==='MP'&&t.cls==='MP')return['hi','r_mr_pip'];
+ if(a.cls==='MP')return['mo',x?'r_mr_o1':'r_mr_o2'];
+ return t.cls==='ME'?['hi','r_mr_pip']:['mo',x?'r_mr_p1':'r_mr_p2'];}
+function rule7(a,t){if(document.getElementById('sev').checked)return['hi','r_hs_sev'];
+ if(a.cls===t.cls)return['hi','r_hs_same'];
+ if((a.cls==='HPZ'&&t.cls==='HPD')||(a.cls==='HPD'&&t.cls==='HPZ'))return['mo','r_hs_pp'];
+ return['mo','r_hs_diff'];}
+function rule8(a,t){if(document.getElementById('sev').checked)return['hi','r_st_sev'];
+ if(a.cls===t.cls)return['hi','r_st_same'];
+ if(t.cls==='CC')return['lo','r_st_c'];
+ var p=function(x,y){return x==='CA'&&y==='CD2'||x==='CB'&&(y==='CD1'||y==='CD2')};
+ if(p(a.cls,t.cls)||p(t.cls,a.cls))return['mo','r_st_x'];
+ return['lo','r_st_diff'];}
+var SEVTXT='Severe reaction: anaphylaxis, angioedema/urticaria with respiratory involvement, DRESS, SJS, TEN, AGEP. Unchecked = mild (angioedema/urticaria without respiratory involvement, maculopapular rash, pruritus)';
+Object.assign(L.en,{tfq:'Fluoroquinolones',tmr:'Muscle relaxants',ths:'Antihistamines (H1)',tst:'Corticosteroids',
+t5:'Fluoroquinolone Allergy Management Checker',st5:'Select the culprit fluoroquinolone(s) and the reaction severity',sev5:SEVTXT+', severe photosensitivity',
+r_fq_sev:'Severe reaction: avoid the culprit and the whole class (shared core structure; cross-allergy reported up to about 50%). If the drug is essential, consult an allergist about skin testing or desensitization under supervision',
+r_fq_mild:'Mild reaction: avoid the culprit. Another fluoroquinolone may be considered with close monitoring only if the patient has tolerated one before; if allergic to another or no history, avoid the whole class',
+ref5:SRC+'References cited there: McGee EU et al. Pharmacy (Basel) 2019;7(3):97; Pichler WJ, Hausmann O. Int Arch Allergy Immunol 2016;171:166-179. Note: lomefloxacin, pefloxacin, sparfloxacin and trovafloxacin may cause photosensitivity; advise avoiding direct and indirect UV exposure.',
+t6:'Oral Muscle Relaxant Allergy Management Checker',st6:'Select the culprit muscle relaxant(s) and the reaction severity',sev6:SEVTXT+'. If the culprit is unknown, avoid muscle relaxants',
+r_mr_pip:'Very similar chemical structure (piperidine type); each is a contraindication for the other in product information: avoid',
+r_mr_o1:'Different class (ethanolamine). Choose only if the patient has previously tolerated diphenhydramine; if allergic or never used, avoid muscle relaxants',
+r_mr_o2:'Different class (ethanolamine). Choose only if the patient has previously tolerated diphenhydramine; if allergic or never used, avoid muscle relaxants, or if essential choose a different drug class and monitor for ADR',
+r_mr_p1:'Different class (piperidine type). Choose only if the patient has previously tolerated lidocaine; if allergic or never used, avoid muscle relaxants',
+r_mr_p2:'Different class (piperidine type). Choose only if the patient has previously tolerated lidocaine; if allergic or never used, avoid muscle relaxants, or if essential choose a different drug class and monitor for ADR',
+ref6:SRC+'Published cross-allergy data are lacking for this group; both immediate and delayed reactions have been reported. References: Quasthoff S et al. CNS Neurosci Ther 2008;14:107-119; PDR drug summary for orphenadrine citrate injection.',
+t7:'H1-Antihistamine Allergy Management Checker',st7:'Select the culprit antihistamine(s) and the reaction severity',sev7:SEVTXT,
+r_hs_sev:'Severe reaction: avoid all H1-antagonists; the patient may react to several of them',
+r_hs_same:'Same chemical class as the culprit: avoid',
+r_hs_pp:'Different class but similar structure (piperazine and piperidine): cross-allergy possible, use caution',
+r_hs_diff:'Different structure: may be chosen only if the patient has tolerated another H1-antagonist; if allergic to others or no history, avoid the whole group',
+ref7:SRC+'Data on cross-allergy within this group are limited. Reference: Criado PR et al. An Bras Dermatol 2010;85(2):195-210.',
+t8:'Systemic Corticosteroid Allergy Management Checker',st8:'Select the culprit corticosteroid(s) and the reaction severity',sev8:SEVTXT,
+r_st_sev:'Severe reaction: avoid the culprit and the whole group of systemic corticosteroids; if essential, consult an allergist',
+r_st_same:'Same structural group as the culprit: avoid',
+r_st_c:'Group C (betamethasone type) is suggested because it has the fewest cross-allergy reports; choose a group different from the culprit',
+r_st_x:'Cross-allergy has been studied between groups A and D2 and between groups B and D1/D2: use caution',
+r_st_diff:'Different structural group: may be considered with monitoring; no clear cross-allergy pattern is established for systemic corticosteroids',
+ref8:SRC+'No clear cross-allergy pattern has been established for systemic corticosteroids; more data are needed. References: Ramirez R, Brancaccio RR. Allergic cutaneous reactions to systemic corticosteroids; Matura M. Contact Dermatitis 1998;38:225-226.'});
 var lang="en",sel=[],RK={no:0,lo:1,mo:2,hi:3};
 function rule(a,t){
  if(a.g&&a.g===t.g)return["hi","r_same"];
@@ -169,10 +219,10 @@ function rule(a,t){
 function track(p){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,title:p,event:true})}catch(e){}}
 function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function render(){
- var D={bl:DB,ae:E,ns:N,sf:S}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4}[grp];
+ var D={bl:DB,ae:E,ns:N,sf:S,fq:FQ,mr:MR,hs:HS,st:ST}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4,fq:rule5,mr:rule6,hs:rule7,st:rule8}[grp];
  var T=L[lang],i=lang==="th"?0:1,qv=document.getElementById("q").value.toLowerCase();
  document.documentElement.lang=lang;
- var s={bl:'',ae:'2',ns:'3',sf:'4'}[grp];document.getElementById('tns').textContent=T.tns;document.getElementById('tsf').textContent=T.tsf;document.getElementById('tns').className=grp==='ns'?'on':'';document.getElementById('tsf').className=grp==='sf'?'on':'';
+ var s={bl:'',ae:'2',ns:'3',sf:'4',fq:'5',mr:'6',hs:'7',st:'8'}[grp];['fq','mr','hs','st'].forEach(function(g){var b=document.getElementById('t'+g);b.textContent=T['t'+g];b.className=grp===g?'on':''});document.getElementById('tns').textContent=T.tns;document.getElementById('tsf').textContent=T.tsf;document.getElementById('tns').className=grp==='ns'?'on':'';document.getElementById('tsf').className=grp==='sf'?'on':'';
  ["t","st","disc","h1s","h2s","sevt","ref"].forEach(function(k){var m={t:"t"+s,st:"st"+s,disc:"disc",h1s:"h1",h2s:"h2",sevt:"sev"+s,ref:"ref"+s};document.getElementById(k).textContent=T[m[k]]});
  document.getElementById("tbl").textContent=T.tbl;document.getElementById("tae").textContent=T.tae;
  document.getElementById("tbl").className=grp==="bl"?"on":"";document.getElementById("tae").className=grp==="ae"?"on":"";
@@ -201,6 +251,7 @@ document.getElementById("tbl").onclick=function(){grp="bl";sel=[];track('tab/bl'
 document.getElementById("tae").onclick=function(){grp="ae";sel=[];track('tab/ae');render()};
 document.getElementById('tns').onclick=function(){grp='ns';sel=[];track('tab/ns');render()};
 document.getElementById('tsf').onclick=function(){grp='sf';sel=[];track('tab/sf');render()};
+['fq','mr','hs','st'].forEach(function(g){document.getElementById('t'+g).onclick=function(){grp=g;sel=[];track('tab/'+g);render()}});
 render();
 </script>
 <script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
