@@ -43,7 +43,7 @@ h2{font-size:1rem;margin:0 0 4px}
 <main>
 <header>
 <div><h1 id="t"></h1><p class="sub" id="st"></p></div>
-<div class="lang"><button id="bth">ไทย</button><button id="ben">EN</button></div>
+
 </header>
 <div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button></div>
 <div class="card warn" id="disc"></div>
@@ -175,7 +175,7 @@ function render(){
  document.getElementById("tbl").textContent=T.tbl;document.getElementById("tae").textContent=T.tae;
  document.getElementById("tbl").className=grp==="bl"?"on":"";document.getElementById("tae").className=grp==="ae"?"on":"";
  document.getElementById("q").placeholder=T.ph;
- document.getElementById("bth").className=lang==="th"?"on":"";document.getElementById("ben").className=lang==="en"?"on":"";
+ 
  document.getElementById("list").innerHTML=D.filter(function(d){return !qv||(d.th+d.en).toLowerCase().indexOf(qv)>-1}).map(function(d){
   return '<button class="chip'+(sel.indexOf(d.id)>-1?" sel":"")+'" data-id="'+d.id+'">'+esc(i?d.en:d.th)+'</button>'}).join("");
  var out=document.getElementById("out");
@@ -193,8 +193,8 @@ document.getElementById("list").addEventListener("click",function(e){var id=e.ta
  var k=sel.indexOf(id);if(k>-1)sel.splice(k,1);else sel.push(id);render()});
 document.getElementById("q").addEventListener("input",render);
 document.getElementById("sev").addEventListener("change",render);
-document.getElementById("bth").onclick=function(){lang="th";render()};
-document.getElementById("ben").onclick=function(){lang="en";render()};
+
+
 document.getElementById("tbl").onclick=function(){grp="bl";sel=[];render()};
 document.getElementById("tae").onclick=function(){grp="ae";sel=[];render()};
 document.getElementById('tns').onclick=function(){grp='ns';sel=[];render()};
