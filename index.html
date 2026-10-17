@@ -55,6 +55,7 @@ h2{font-size:1rem;margin:0 0 4px}
 </div>
 <div class="card"><h2 id="h2s"></h2><div id="out"></div></div>
 <p class="ref" id="ref"></p>
+<p class="ref">This page collects anonymous visit statistics (page views and which drugs are selected) using GoatCounter, without cookies. No patient data is collected.</p>
 </main>
 <script>
 // group: R1 side-chain group. A = amoxicillin-like, B = ampicillin-like, C = ceftriaxone-like (methoxyimino), D = ceftazidime-like
@@ -71,7 +72,7 @@ var D=[
 ].map(function(r){return{id:r[0],th:r[1],en:r[2],cls:r[3],g:r[4]}});
 var CL={P:["เพนิซิลลิน","Penicillin"],C0:["เซฟาโลสปอริน","Cephalosporin"],CP:["คาร์บาพีเนม","Carbapenem"],M:["โมโนแบคแทม","Monobactam"]};
 var L={th:{t:"ตรวจสอบ Cross-reactivity ของยากลุ่ม β-lactam",st:"เลือกยาที่ผู้ป่วยแพ้ แล้วดูยาที่อาจแพ้ข้ามกลุ่ม",
-disc:"⚠ ต้นแบบเพื่อการสาธิต ยังไม่ผ่านการตรวจสอบโดยเภสัชกร/แพทย์ ใช้เป็นเครื่องมือช่วยตัดสินใจสำหรับบุคลากรทางการแพทย์เท่านั้น ไม่ใช่การวินิจฉัย และไม่ควรใช้แทนการประเมินผู้ป่วยรายบุคคลหรือการทดสอบภูมิแพ้ยา",
+disc:"⚠ เครื่องมือนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.",
 h1:"1. เลือกยาที่ผู้ป่วยแพ้",h2:"2. ผลการประเมิน",ph:"ค้นหาชื่อยา (ไทย/อังกฤษ)",
 sev:"ประวัติแพ้รุนแรงแบบล่าช้า (SJS/TEN, DRESS, ไตอักเสบจากภูมิแพ้ ฯลฯ) – ควรหลีกเลี่ยงยาทั้งกลุ่มและปรึกษาผู้เชี่ยวชาญ",
 empty:"ยังไม่ได้เลือกยา",hi:"ความเสี่ยงสูง",mo:"ปานกลาง",lo:"ต่ำ",no:"แทบไม่พบ",
@@ -80,7 +81,7 @@ r_cep:"R1 ต่างกัน โอกาสแพ้ข้ามต่ำ (�
 r_sev:"แพ้รุนแรงแบบล่าช้า: หลีกเลี่ยงทั้งกลุ่ม β-lactam จนกว่าผู้เชี่ยวชาญประเมิน",
 ref:"อ้างอิงหลัก: Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018 (ข้อมูลตัวอย่าง ต้องตรวจทานก่อนใช้จริง)"},
 en:{t:"β-lactam Cross-reactivity Checker",st:"Select the drugs the patient is allergic to and see possible cross-reactive drugs",
-disc:"⚠ เครื่องมือนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ปวยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจาณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.",
+disc:"⚠ เครื่องมือนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.",
 h1:"1. Select the culprit drug(s)",h2:"2. Assessment",ph:"Search drug name (Thai/English)",
 sev:"History of severe delayed reaction (SJS/TEN, DRESS, allergic nephritis, etc.): avoid the whole class and consult a specialist",
 empty:"No drug selected yet",hi:"High risk",mo:"Moderate",lo:"Low",no:"Negligible",
@@ -165,6 +166,7 @@ function rule(a,t){
  if(a.cls==="M"||t.cls==="M")return["no","r_atm"];
  if(a.cls==="CP"||t.cls==="CP")return["lo","r_carb"];
  return["lo","r_cep"];}
+function track(p){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,title:p,event:true})}catch(e){}}
 function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function render(){
  var D={bl:DB,ae:E,ns:N,sf:S}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4}[grp];
@@ -190,15 +192,15 @@ function render(){
   return '<div class="res '+r.lv+'"><b>'+esc(i?r.t.en:r.t.th)+'<span class="tag">'+T[r.lv]+'</span></b><small>'+CL[r.t.cls][i]+' · '+T[r.rs]+'</small></div>'}).join("");
 }
 document.getElementById("list").addEventListener("click",function(e){var id=e.target.getAttribute("data-id");if(!id)return;
- var k=sel.indexOf(id);if(k>-1)sel.splice(k,1);else sel.push(id);render()});
+ var k=sel.indexOf(id);if(k>-1)sel.splice(k,1);else{sel.push(id);track('select/'+grp+'/'+id)}render()});
 document.getElementById("q").addEventListener("input",render);
-document.getElementById("sev").addEventListener("change",render);
+document.getElementById("sev").addEventListener("change",function(){track('flag/'+grp+'/'+(this.checked?'on':'off'));render()});
 
 
-document.getElementById("tbl").onclick=function(){grp="bl";sel=[];render()};
-document.getElementById("tae").onclick=function(){grp="ae";sel=[];render()};
-document.getElementById('tns').onclick=function(){grp='ns';sel=[];render()};
-document.getElementById('tsf').onclick=function(){grp='sf';sel=[];render()};
+document.getElementById("tbl").onclick=function(){grp="bl";sel=[];track('tab/bl');render()};
+document.getElementById("tae").onclick=function(){grp="ae";sel=[];track('tab/ae');render()};
+document.getElementById('tns').onclick=function(){grp='ns';sel=[];track('tab/ns');render()};
+document.getElementById('tsf').onclick=function(){grp='sf';sel=[];track('tab/sf');render()};
 render();
 </script>
 <script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
