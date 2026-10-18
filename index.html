@@ -45,7 +45,7 @@ h2{font-size:1rem;margin:0 0 4px}
 <div><h1 id="t"></h1><p class="sub" id="st"></p></div>
 
 </header>
-<div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button><button id="tfq"></button><button id="tmr"></button><button id="ths"></button><button id="tst"></button></div>
+<div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button><button id="tfq"></button><button id="tmr"></button><button id="ths"></button><button id="tst"></button><button id="tpp"></button><button id="tla"></button></div>
 <div class="card warn" id="disc"></div>
 <div class="card">
 <h2 id="h1s"></h2>
@@ -208,6 +208,27 @@ r_st_c:'Group C (betamethasone type) is suggested because it has the fewest cros
 r_st_x:'Cross-allergy has been studied between groups A and D2 and between groups B and D1/D2: use caution',
 r_st_diff:'Different structural group: may be considered with monitoring; no clear cross-allergy pattern is established for systemic corticosteroids',
 ref8:SRC+'No clear cross-allergy pattern has been established for systemic corticosteroids; more data are needed. References: Ramirez R, Brancaccio RR. Allergic cutaneous reactions to systemic corticosteroids; Matura M. Contact Dermatitis 1998;38:225-226.'});
+var PP=mk({PPI:'Omeprazole|Esomeprazole|Lansoprazole|Pantoprazole|Rabeprazole'},'p');
+var LA=mk({LE:'Procaine|Chloroprocaine|Tetracaine|Benzocaine',LA:'Lidocaine|Mepivacaine|Bupivacaine|Levobupivacaine|Ropivacaine|Prilocaine|Articaine',LU:'Unknown local anesthetic'},'l');
+CL.PPI=['Benzimidazole PPI','Benzimidazole PPI'];CL.LE=['Ester type','Ester type'];CL.LA=['Amide type','Amide type'];CL.LU=['Culprit not known','Culprit not known'];
+function rule9(a,t){return document.getElementById('sev').checked?['hi','r_ppi_sev']:['mo','r_ppi_mild']}
+function rule10(a,t){var i=document.getElementById('sev').checked?'1':'2';
+ if(a.cls==='LU')return t.th==='Lidocaine'?['lo','r_la_l'+i]:['mo','r_la_u'+i];
+ return['mo','r_la_k'+i];}
+Object.assign(L.en,{tpp:'PPIs',tla:'Local anesthetics',
+t9:'Proton Pump Inhibitor Allergy Management Checker',st9:'Select the culprit PPI(s) and the reaction severity',sev9:SEVTXT,
+r_ppi_sev:'Severe reaction: avoid all PPIs (shared benzimidazole-pyridine core) and consider an alternative drug; if a PPI is essential, consult an allergist',
+r_ppi_mild:'Mild reaction: avoid the whole PPI class; or, if a PPI is necessary, choose a single different agent and monitor the patient after use; or choose an alternative drug. Cross-allergy reports are limited and varied',
+ref9:SRC+'References cited there: Elfau MTS et al. J Investig Allergol Clin Immunol 2010;20(2):157-161; Ozdemir SK. Int Arch Allergy Immunol 2016;171:54-60; Lombardo C, Bonadonna P. Curr Treat Options Allergy 2015;2:110-123.',
+t10:'Local Anesthetic Allergy Pre-procedure Checker',st10:'Select the local anesthetic linked to the past reaction (or Unknown) and the reaction type',
+sev10:'Immediate reaction: onset under 1 hour of pruritus, urticaria, angioedema, bronchospasm or hypotension, not limited to the injection site. Unchecked = delayed reaction (onset about 3 to 72 hours: localized dermatitis, swelling or mucosal inflammation at the injection site). Palpitations, tachycardia, anxiety or vasovagal symptoms alone are likely non-allergic and local anesthetics can be given normally',
+r_la_k1:'Possible IgE-mediated (type I) reaction. If the procedure is urgent: choose a different local anesthetic from the culprit, or avoid local anesthetics if possible. If elective or can be postponed: refer to an allergist for skin testing',
+r_la_k2:'Possible cell-mediated (type IV) reaction, rarely dangerous. If urgent: choose a different local anesthetic from the culprit, or avoid local anesthetics if possible. If elective or can be postponed: refer for patch testing (usually to a dermatologist)',
+r_la_u1:'Culprit not known; possible type I reaction. If urgent: choose lidocaine, or avoid local anesthetics if possible. If elective or can be postponed: refer to an allergist for skin testing',
+r_la_u2:'Culprit not known; possible type IV reaction. If urgent: choose lidocaine, or avoid local anesthetics if possible. If elective or can be postponed: refer for patch testing (usually to a dermatologist)',
+r_la_l1:'Preferred when the culprit is unknown and the procedure is urgent: lidocaine is widely used, anaphylaxis reports are few, and tolerance has been seen even after earlier reported reactions. If elective: refer to an allergist for skin testing',
+r_la_l2:'Preferred when the culprit is unknown and the procedure is urgent: lidocaine is widely used, with few anaphylaxis reports. If elective or can be postponed: refer for patch testing (usually to a dermatologist)',
+ref10:'Source: UpToDate graphic 117594 v1.0, Preprocedural evaluation and management of suspected history of local anesthetic (LA) allergy if LA would ordinarily be used (paraphrased). Decisions to delay a procedure for testing depend on the risks of delay and the risks and benefits of LA versus other anesthesia or analgesia. This flowchart does not describe class-level cross-reactivity (ester or amide labels here are for information only); confirm a safe alternative with an allergist. Not an official practice guideline.'});
 var lang="en",sel=[],RK={no:0,lo:1,mo:2,hi:3};
 function rule(a,t){
  if(a.g&&a.g===t.g)return["hi","r_same"];
@@ -219,10 +240,10 @@ function rule(a,t){
 function track(p){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,title:p,event:true})}catch(e){}}
 function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function render(){
- var D={bl:DB,ae:E,ns:N,sf:S,fq:FQ,mr:MR,hs:HS,st:ST}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4,fq:rule5,mr:rule6,hs:rule7,st:rule8}[grp];
+ var D={bl:DB,ae:E,ns:N,sf:S,fq:FQ,mr:MR,hs:HS,st:ST,pp:PP,la:LA}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4,fq:rule5,mr:rule6,hs:rule7,st:rule8,pp:rule9,la:rule10}[grp];
  var T=L[lang],i=lang==="th"?0:1,qv=document.getElementById("q").value.toLowerCase();
  document.documentElement.lang=lang;
- var s={bl:'',ae:'2',ns:'3',sf:'4',fq:'5',mr:'6',hs:'7',st:'8'}[grp];['fq','mr','hs','st'].forEach(function(g){var b=document.getElementById('t'+g);b.textContent=T['t'+g];b.className=grp===g?'on':''});document.getElementById('tns').textContent=T.tns;document.getElementById('tsf').textContent=T.tsf;document.getElementById('tns').className=grp==='ns'?'on':'';document.getElementById('tsf').className=grp==='sf'?'on':'';
+ var s={bl:'',ae:'2',ns:'3',sf:'4',fq:'5',mr:'6',hs:'7',st:'8',pp:'9',la:'10'}[grp];['fq','mr','hs','st','pp','la'].forEach(function(g){var b=document.getElementById('t'+g);b.textContent=T['t'+g];b.className=grp===g?'on':''});document.getElementById('tns').textContent=T.tns;document.getElementById('tsf').textContent=T.tsf;document.getElementById('tns').className=grp==='ns'?'on':'';document.getElementById('tsf').className=grp==='sf'?'on':'';
  ["t","st","disc","h1s","h2s","sevt","ref"].forEach(function(k){var m={t:"t"+s,st:"st"+s,disc:"disc",h1s:"h1",h2s:"h2",sevt:"sev"+s,ref:"ref"+s};document.getElementById(k).textContent=T[m[k]]});
  document.getElementById("tbl").textContent=T.tbl;document.getElementById("tae").textContent=T.tae;
  document.getElementById("tbl").className=grp==="bl"?"on":"";document.getElementById("tae").className=grp==="ae"?"on":"";
@@ -233,7 +254,7 @@ function render(){
  var out=document.getElementById("out");
  if(!sel.length){out.innerHTML='<p class="sub">'+T.empty+'</p>';return}
  var A=D.filter(function(d){return sel.indexOf(d.id)>-1}),sev=document.getElementById("sev").checked;
- var rows=D.filter(function(d){return sel.indexOf(d.id)<0}).map(function(t){
+ var rows=D.filter(function(d){return sel.indexOf(d.id)<0&&d.cls!=='LU'}).map(function(t){
   var best=["no",null],why=[];
   A.forEach(function(a){var r=rule(a,t);if(RK[r[0]]>RK[best[0]])best=r});
   if(sev){if(grp==='bl')best=['hi','r_sev'];else if(grp==='ae'&&t.cls!=='NA')best=['hi','r_sev2'];}
@@ -251,7 +272,7 @@ document.getElementById("tbl").onclick=function(){grp="bl";sel=[];track('tab/bl'
 document.getElementById("tae").onclick=function(){grp="ae";sel=[];track('tab/ae');render()};
 document.getElementById('tns').onclick=function(){grp='ns';sel=[];track('tab/ns');render()};
 document.getElementById('tsf').onclick=function(){grp='sf';sel=[];track('tab/sf');render()};
-['fq','mr','hs','st'].forEach(function(g){document.getElementById('t'+g).onclick=function(){grp=g;sel=[];track('tab/'+g);render()}});
+['fq','mr','hs','st','pp','la'].forEach(function(g){document.getElementById('t'+g).onclick=function(){grp=g;sel=[];track('tab/'+g);render()}});
 render();
 </script>
 <script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
