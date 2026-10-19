@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือปรับขนาดยาต้านจุลชีพ โรงพยาบาลร้อยเอ็ด</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-medical-800 to-teal-700 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-md border border-white/20">
+                        <i class="fa-solid font-bold fa-prescription-bottle-medical text-3xl text-teal-200"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold tracking-tight">คู่มือปรับขนาดยาต้านจุลชีพ</h1>
+                        <p class="text-xs sm:text-sm text-teal-100 flex items-center gap-1">
+                            <i class="fa-solid fa-hospital text-teal-300"></i> โรงพยาบาลร้อยเอ็ด
+                            <span class="bg-teal-900/60 text-teal-200 text-[10px] px-2 py-0.5 rounded-full border border-teal-500/30 font-mono ml-1">v18.9.69</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right text-xs text-teal-100/80 hidden md:block border-l border-teal-600/50 pl-4">
+                    <p class="font-medium text-teal-50">จัดทำโดย:</p>
+                    <p>อายุรแพทย์โรคติดเชื้อ และกลุ่มงานเภสัชกรรม</p>
+                    <p>โรงพยาบาลร้อยเอ็ด</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sub-header & Quick Info Banner -->
+    <section class="bg-teal-50 border-b border-teal-100 py-2.5 px-4 text-xs text-teal-800">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-info text-teal-600"></i>
+                <span>ค้นหาตามชื่อยา, ข้อบ่งใช้ หรือปรับดูขนาดยาตามสภาวะการทำงานของไต (CrCl / Renal Replacement Therapy)</span>
+            </div>
+            <div class="flex items-center gap-3 font-medium">
+                <span class="text-slate-600"><i class="fa-solid fa-capsules text-teal-600 mr-1"></i> ยาในคลัง: <strong id="total-drugs-count" class="text-teal-700">19</strong> รายการ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        
+        <!-- Search and Filter Panel -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6 transition-all">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                
+                <!-- Realtime Search Input -->
+                <div class="lg:col-span-5 relative">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">ค้นหาชื่อยา</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="search-input" 
+                            placeholder="พิมพ์ชื่อยา เช่น Amikacin, Meropenem, Colistin..." 
+                            class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 placeholder-slate-400 font-medium text-sm transition-all">
+                        <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="lg:col-span-4">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">กลุ่มยา (Category)</label>
+                    <select id="category-filter" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-slate-800 text-sm font-medium transition-all">
+                        <option value="ALL">ทั้งหมด (All Categories)</option>
+                        <option value="Aminoglycosides">Aminoglycosides</option>
+                        <option value="Carbapenems">Carbapenems</option>
+                        <option value="Fluoroquinolones">Fluoroquinolones</option>
+                        <option value="Cephalosporins/Beta-lactams">Cephalosporins & Combination</option>
+                        <option value="Glycopeptides/Lipopeptides">Glycopeptides (Vancomycin)</option>
+                        <option value="Polymyxins/Others">Polymyxins & Antimicrobial Others</option>
+                        <option value="Antifungals">Antifungals (Amphotericin B)</option>
+                    </select>
+                </div>
+
+                <!-- Quick Filter Kidney Function -->
+                <div class="lg:col-span-3">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">สภาวะไต (Renal Focus)</label>
+                    <select id="renal-filter" class="w-full py-2.5 px-3 bg-teal-50 border border-teal-200 text-teal-900 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm font-medium transition-all">
+                        <option value="ALL">แสดงทุกสภาวะไต</option>
+                        <option value="NORMAL">CrCl ปกติ (>80-90 mL/min)</option>
+                        <option value="MODERATE">CrCl ปานกลาง (30-50 mL/min)</option>
+                        <option value="SEVERE">CrCl ต่ำ (<30 mL/min)</option>
+                        <option value="HD">Hemodialysis (HD)</option>
+                        <option value="CAPD">CAPD</option>
+                        <option value="CRRT">CRRT / SLED</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Category Pills Shortcuts -->
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 text-xs">
+                <span class="text-slate-400 font-medium whitespace-nowrap"><i class="fa-solid fa-filter mr-1"></i> ทางลัด:</span>
+                <button onclick="setCategory('ALL')" class="pill-btn bg-slate-800 text-white px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">ทั้งหมด</button>
+                <button onclick="setCategory('Aminoglycosides')" class="pill-btn bg-slate-100 hover:bg-teal-100 text-slate-700 hover:text-teal-800 px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">Aminoglycosides</button>
+                <button onclick="setCategory('Carbapenems')" class="pill-btn bg-slate-100 hover:bg-teal-100 text-slate-700 hover:text-teal-800 px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">Carbapenems</button>
+                <button onclick="setCategory('Cephalosporins/Beta-lactams')" class="pill-btn bg-slate-100 hover:bg-teal-100 text-slate-700 hover:text-teal-800 px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">Cephalosporins/Beta-lactams</button>
+                <button onclick="setCategory('Fluoroquinolones')" class="pill-btn bg-slate-100 hover:bg-teal-100 text-slate-700 hover:text-teal-800 px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">Fluoroquinolones</button>
+                <button onclick="setCategory('Polymyxins/Others')" class="pill-btn bg-slate-100 hover:bg-teal-100 text-slate-700 hover:text-teal-800 px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">Polymyxins & Others</button>
+                <button onclick="setCategory('Antifungals')" class="pill-btn bg-slate-100 hover:bg-teal-100 text-slate-700 hover:text-teal-800 px-3 py-1 rounded-full whitespace-nowrap transition-all font-medium">Antifungals</button>
+            </div>
+        </div>
+
+        <!-- Drug List / Grid Display -->
+        <div id="drug-list-container" class="grid grid-cols-1 gap-6">
+            <!-- Dynamic Drug Cards generated by JS -->
+        </div>
+
+        <!-- Empty State Search Result -->
+        <div id="empty-state" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
+            <div class="inline-flex p-4 bg-slate-100 rounded-full text-slate-400 mb-3">
+                <i class="fa-solid fa-capsules text-4xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700">ไม่พบข้อมูลยาที่ตรงกับการค้นหา</h3>
+            <p class="text-sm text-slate-500 mt-1">กรุณาตรวจสอบชื่อยาหรือล้างตัวกรองเพื่อค้นหาใหม่อีกครั้ง</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm">
+                <i class="fa-solid fa-rotate-left mr-1"></i> ล้างการค้นหาทั้งหมด
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Drug Details Modal -->
+    <div id="drug-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden my-auto transform transition-all">
+            
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-teal-700 to-medical-800 text-white p-4 sm:p-5 flex items-start justify-between relative">
+                <div>
+                    <span id="modal-category" class="bg-teal-900/80 text-teal-200 text-xs px-2.5 py-0.5 rounded-md font-semibold tracking-wide border border-teal-500/30">Category</span>
+                    <h2 id="modal-drug-name" class="text-xl sm:text-2xl font-bold mt-1 text-white">Drug Name</h2>
+                    <p id="modal-drug-strength" class="text-sm text-teal-100 font-mono mt-0.5">Strength / Formulation</p>
+                </div>
+                <button onclick="closeModal()" class="text-teal-200 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-xl transition-all">
+                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-grow space-y-6 text-sm text-slate-700">
+                
+                <!-- Quick Notice Banner (if any) -->
+                <div id="modal-alert-box" class="hidden p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start gap-2.5">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base mt-0.5"></i>
+                    <div id="modal-alert-text">Warning or note goes here</div>
+                </div>
+
+                <!-- Weight Guidance / General Rules -->
+                <div id="modal-weight-section" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-4">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-2 text-sm">
+                        <i class="fa-solid fa-weight-scale text-teal-600"></i> การคำนวณขนาดยาจากน้ำหนักตัว (Body Weight Guidance)
+                    </h4>
+                    <div id="modal-weight-content" class="text-xs sm:text-sm space-y-1 text-slate-600"></div>
+                </div>
+
+                <!-- Main Dosing Table Section -->
+                <div>
+                    <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-3 text-sm">
+                        <i class="fa-solid fa-table-cells text-teal-600"></i> ตารางปรับขนาดยาตาม Renal Function (Dosing Schedule)
+                    </h4>
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm custom-scrollbar">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                <tr id="modal-table-header">
+                                    <th class="p-3 border-r border-slate-200">CrCl (mL/min) / Condition</th>
+                                    <th class="p-3 border-r border-slate-200">Loading Dose</th>
+                                    <th class="p-3">Maintenance Dose</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-table-body" class="divide-y divide-slate-200 bg-white">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Administration & Drip Time -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-teal-50/60 border border-teal-100 rounded-xl p-4">
+                        <h4 class="font-bold text-teal-900 flex items-center gap-2 mb-2 text-xs sm:text-sm">
+                            <i class="fa-solid fa-syringe text-teal-600"></i> การบริหารยา (Administration)
+                        </h4>
+                        <div id="modal-admin-content" class="text-xs sm:text-sm text-teal-950 space-y-1.5 leading-relaxed"></div>
+                    </div>
+
+                    <!-- Storage & Stability -->
+                    <div class="bg-blue-50/60 border border-blue-100 rounded-xl p-4">
+                        <h4 class="font-bold text-blue-900 flex items-center gap-2 mb-2 text-xs sm:text-sm">
+                            <i class="fa-solid fa-snowflake text-blue-600"></i> การเก็บรักษา & ความคงตัว (Storage & Stability)
+                        </h4>
+                        <div id="modal-storage-content" class="text-xs sm:text-sm text-blue-950 space-y-1.5 leading-relaxed"></div>
+                    </div>
+                </div>
+
+                <!-- Special Notes / Monitoring -->
+                <div id="modal-notes-section" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-4">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-2 text-xs sm:text-sm">
+                        <i class="fa-solid fa-clipboard-check text-teal-600"></i> หมายเหตุและข้อแนะนำเพิ่มเติม (Special Remarks)
+                    </h4>
+                    <div id="modal-notes-content" class="text-xs sm:text-sm text-slate-600 space-y-1 leading-relaxed"></div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-100 p-3 sm:p-4 border-t border-slate-200 flex justify-between items-center">
+                <span class="text-[11px] text-slate-500">อ้างอิง: คู่มือปรับขนาดยาต้านจุลชีพ รพ.ร้อยเอ็ด (18.9.69)</span>
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-medium transition-all shadow-sm">
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 text-xs py-6 border-t border-slate-700 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-medium text-slate-200">คู่มือปรับขนาดยาต้านจุลชีพ โรงพยาบาลร้อยเอ็ด (Antimicrobial Dosing Guide Version 18.9.69)</p>
+            <p class="text-slate-400">จัดทำโดย อายุรแพทย์โรคติดเชื้อ และกลุ่มงานเภสัชกรรม โรงพยาบาลร้อยเอ็ด</p>
+            <p class="text-slate-500 pt-2 border-t border-slate-700/60 max-w-2xl mx-auto">
+                ข้อแนะนำ: การปรับขนาดยาควรพิจารณาร่วมกับสภาวะทางคลินิกของผู้ป่วย ผลการเพาะเชื้อ และการติดตามระดับยาในเลือด (TDM) ตามดุลยพินิจของแพทย์และเภสัชกรผู้ดูแล
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data and Application Logic -->
+    <script>
+        // Database of 19 Antimicrobial Drugs from Roi Et Hospital Document
+        const DRUG_DATABASE = [
+            {
+                id: "amikacin",
+                name: "Amikacin inj.",
+                strength: "500 mg/vial",
+                category: "Aminoglycosides",
+                searchTerms: ["amikacin", "อามิคาซิน", "aminoglycoside", "500mg"],
+                weightGuide: [
+                    "<strong>การคำนวณขนาดยาจากน้ำหนักตัว:</strong>",
+                    "• <strong>ใช้ Total body weight (TBW) เมื่อ:</strong> 1. ผู้ป่วย Critically ill เนื่องจากมีภาวะ Vd ของยาเพิ่มขึ้น, 2. TBW < Ideal body weight (IBW)",
+                    "• <strong>ใช้ Adjusted body weight (ABW) เมื่อ:</strong> 1. TBW > (1.2 x IBW), 2. BMI > 30 kg/m²"
+                ],
+                tableHeaders: ["CrCl (mL/min)", "Loading dose*", "Maintenance dose"],
+                dosingRows: [
+                    { crcl: ">80", loading: "-", maintenance: "20 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 24 hr" },
+                    { crcl: "60-79", loading: "-", maintenance: "15 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 24 hr" },
+                    { crcl: "40-59", loading: "-", maintenance: "12 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 24 hr" },
+                    { crcl: "30-39", loading: "15-30 mg/kg", maintenance: "15 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 48 hr" },
+                    { crcl: "20-29", loading: "20-30 mg/kg (for known/suspected sepsis)", maintenance: "12 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 48 hr" },
+                    { crcl: "10-19", loading: "20-30 mg/kg", maintenance: "10 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 48 hr" },
+                    { crcl: "<10", loading: "20-30 mg/kg", maintenance: "7.5 mg/kg + NSS/D5W 100 mL IV drip in 1 hr q 48 hr" },
+                    { crcl: "HD", loading: "IV drip in 30 min", maintenance: "5-12.5 mg/kg/dose IV q 72 hr (ในวัน HD ให้ยาหลังทำ HD)" },
+                    { crcl: "CAPD", loading: "IV drip in 30 min", maintenance: "5-12.5 mg/kg/dose IV q 48-72 hr หรือ 2 mg/kg IP q 24 hr" },
+                    { crcl: "CRRT", loading: "IV drip in 30 min", maintenance: "15-25 mg/kg IV drip in 1 hr q 48 hr" }
+                ],
+                administration: [
+                    "• ตามเอกสารกำกับยาระบุ Maximum dose 1.5 g/day แต่สำหรับ Severe infection ไม่ได้เป็นข้อจำกัดในการกำหนดขนาดยาในช่วง Loading dose ดังนั้นอาจพิจารณาให้ยาขนาด 1.5 g/day ได้",
+                    "• Dilute 500 mg ใน 100 หรือ 200 mL NSS หรือ D5W IV drip in 1 hr",
+                    "• ไม่ควรใช้ยานานเกิน 10 วัน",
+                    "• Subsequent doses ควรปรับตามระดับยา TDM หรือการทำงานของไต"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้นาน 24 ชั่วโมง ที่อุณหภูมิ 25 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "gentamicin",
+                name: "Gentamicin inj.",
+                strength: "80 mg/amp",
+                category: "Aminoglycosides",
+                searchTerms: ["gentamicin", "เจนตาไมซิน", "genta", "80mg"],
+                weightGuide: [
+                    "<strong>การคำนวณขนาดยาจากน้ำหนัก:</strong>",
+                    "• <strong>ใช้ TBW เมื่อ:</strong> 1. Critically ill, 2. TBW < IBW",
+                    "• <strong>ใช้ ABW เมื่อ:</strong> 1. TBW > (1.2 x IBW), 2. BMI > 30 kg/m²"
+                ],
+                tableHeaders: ["CrCl (mL/min)", "Gram-negative Infection", "Gram-positive Synergy (Enterococcus spp.)"],
+                dosingRows: [
+                    { crcl: ">80", loading: "7 mg/kg IV q 24 hr หรือ 2-3 mg/kg IV", maintenance: "3 mg/kg IV q 24 hr" },
+                    { crcl: "60-80", loading: "5-7 mg/kg IV q 24 hr", maintenance: "1 mg/kg IV q 12 hr" },
+                    { crcl: "40-60", loading: "4 mg/kg drip IV q 24 hr", maintenance: "1 mg/kg IV q 24 hr" },
+                    { crcl: "30-40", loading: "3.5 mg/kg IV q 24 hr", maintenance: "1 mg/kg IV then dose by level (TDM prefer)" },
+                    { crcl: "20-30", loading: "2.5 mg/kg IV q 24 hr", maintenance: "1 mg/kg IV q 48-72 hr" },
+                    { crcl: "10-20", loading: "4 mg/kg IV q 48 hr", maintenance: "1 mg/kg IV q 48-72 hr" },
+                    { crcl: "<10", loading: "2 mg/kg IV q 72 hr", maintenance: "1 mg/kg IV q 48-72 hr" },
+                    { crcl: "HD", loading: "2 mg/kg IV q 72 hr (ให้หลัง HD)", maintenance: "1 mg/kg IV q 48-72 hr (ให้หลัง HD)" },
+                    { crcl: "CAPD", loading: "0.6 mg/kg IP q 24 hr", maintenance: "No data" },
+                    { crcl: "CRRT", loading: "Systemic Gram-neg: 2.5-5 mg/kg/dose IV (1.7-2 mg/kg q 24h)", maintenance: "Gram-pos synergy: 2-3 mg/kg/dose IV (1-1.5 mg/kg q 24-36h)" }
+                ],
+                administration: [
+                    "• ขนาดยา <40 mg + NSS/D5W 50 mL IV drip in 30 min",
+                    "• ขนาดยา >40-250 mg + NSS/D5W 100 mL IV drip in 30 min",
+                    "• ขนาดยา >250 mg + NSS/D5W 100 mL IV drip in 60 min"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้นาน 24 ชั่วโมง ที่ 25 °C และ 48 ชั่วโมง ที่ 2-8 °C"
+                ],
+                notes: ["สำหรับการติดเชื้อ Gram-positive Synergy ใช้เพื่อเสริมฤทธิ์ Enterococcus spp. เท่านั้น ไม่แนะนำให้ใช้รูปแบบเดี่ยว"]
+            },
+            {
+                id: "ertapenem",
+                name: "Ertapenem inj.",
+                strength: "1 g/vial",
+                category: "Carbapenems",
+                searchTerms: ["ertapenem", "เออร์ตาพีเนม", "invanz", "carbapenem", "1g"],
+                weightGuide: [],
+                tableHeaders: ["สภาวะ / CrCl", "Serum Albumin ≥ 2.5 g/dL", "Serum Albumin < 2.5 g/dL"],
+                dosingRows: [
+                    { crcl: ">30 mL/min", loading: "1 g + NSS 100 mL IV drip in 30 min q 24 hr", maintenance: "CrCl 30-120: 1 g IV drip 30 min q 24 hr | CrCl >120: 1 g drip 30 min q 12 hr" },
+                    { crcl: "<30 mL/min", loading: "500 mg + NSS 100 mL IV drip in 30 min q 24 hr", maintenance: "0.5 - 1 g + NSS 100 mL IV drip in 30 min q 24 hr" },
+                    { crcl: "HD", loading: "500 mg + NSS 100 mL IV drip 30 min q 24 hr", maintenance: "ถ้าให้ยา ≤6 hr ก่อน HD ให้เสริม 150 mg หลัง HD; ถ้า >6 hr ไม่ต้องเสริม" },
+                    { crcl: "CAPD", loading: "0.5 g + NSS 100 mL IV drip in 30 min q 24 hr", maintenance: "0.5 g + NSS 100 mL IV drip in 30 min q 24 hr" },
+                    { crcl: "CRRT", loading: "0.5 - 1 g + NSS 100 mL IV drip in 30 min q 24 hr", maintenance: "0.5 - 1 g + NSS 100 mL IV drip in 30 min q 24 hr" }
+                ],
+                administration: [
+                    "• Final concentration ≤ 20 mg/mL",
+                    "• สารละลายสำหรับเจือจาง: NSS 100 mL IV drip in 30 min"
+                ],
+                storage: [
+                    "• หลังผสมด้วย NSS อยู่ได้นาน 24 ชั่วโมง ที่ 5 °C และ 6 ชั่วโมง ที่ 25 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "meropenem",
+                name: "Meropenem inj.",
+                strength: "1 g/vial",
+                category: "Carbapenems",
+                searchTerms: ["meropenem", "เมโรพีเนม", "meronem", "1g"],
+                weightGuide: ["Loading dose: 2 g + NSS 100 mL IV drip in 30 min สำหรับวิกฤต/ติดเชื้อรุนแรง"],
+                tableHeaders: ["CrCl (mL/min)", "เชื้อทั่วไป (MIC ≤2 mcg/mL)", "เชื้อดื้อยา CRE/CR-PA (MIC 4-8 mcg/mL)", "ติดเชื้อ CNS / Melioidosis / Sepsis*"],
+                dosingRows: [
+                    { crcl: ">50", loading: "1 g IV drip 30 min q 8 hr", maintenance: "2 g IV drip in 3 hr q 8 hr", notes: "2 g IV drip in 30 min q 8 hr" },
+                    { crcl: "26-50", loading: "1 g IV drip 30 min q 12 hr", maintenance: "1 g IV drip in 30 min q 12 hr", notes: "2 g IV drip in 3 hr q 8 hr" },
+                    { crcl: "10-25", loading: "0.5 g IV drip 30 min q 12 hr", maintenance: "0.5 g IV drip 30 min q 12 hr", notes: "1 g IV drip in 3 hr q 8-12 hr" },
+                    { crcl: "<10", loading: "0.5 g IV drip 30 min q 24 hr", maintenance: "1 g IV drip 30 min q 24 hr", notes: "0.5 g IV drip in 3 hr q 12 hr" },
+                    { crcl: "CAPD", loading: "1 g IV drip 30 min q 24 hr", maintenance: "0.5 g IV drip 30 min q 12 hr", notes: "0.5 g IV drip in 3 hr q 12 hr" },
+                    { crcl: "HD", loading: "1 g IV drip 30 min q 24 hr (หลัง HD)", maintenance: "0.5 g IV drip 3 hr q 24 hr (หลัง HD)", notes: "0.5 g IV drip 3 hr q 12 hr (หลัง HD)" },
+                    { crcl: "CRRT", loading: "1 g IV drip 3 hr q 8 hr", maintenance: "0.5 - 1 g IV drip 30 min q 8 hr", notes: "1 g IV drip in 3 hr q 8 hr" }
+                ],
+                administration: [
+                    "• Final concentration: Loading dose คือ 50 mg/mL ส่วน Maintenance dose คือ 1-20 mg/mL",
+                    "• การ drip ในผู้ป่วยวิกฤตหรือเชื้อดื้อยา แนะนำ Extended Infusion (drip in 3 hr) เพื่อผล PK/PD ที่ดีขึ้น"
+                ],
+                storage: [
+                    "• หลังผสมด้วย NSS อยู่ได้นาน 48 ชั่วโมง ที่ 4 °C และ 8 ชั่วโมง ที่ 25 °C"
+                ],
+                notes: ["*ข้อบ่งใช้ CNS/Sepsis/Melioidosis/Cystic fibrosis/Intracranial abscess/Spinal epidural abscess"]
+            },
+            {
+                id: "imipenem",
+                name: "Imipenem 500 mg & Cilastatin 500 mg inj.",
+                strength: "500 mg/500 mg per vial",
+                category: "Carbapenems",
+                searchTerms: ["imipenem", "cilastatin", "อิมิพีเนม", "tienam", "500mg"],
+                weightGuide: ["Maximum dose สำหรับผู้ใหญ่: 50 mg/kg/day หรือไม่เกิน 4 g daily"],
+                tableHeaders: ["CrCl (mL/min)", "Loading Dose", "เชื้อทั่วไป (MIC ≤2) / เชื้อดื้อยา / Melioidosis / Anthrax"],
+                dosingRows: [
+                    { crcl: "≥60 to <130", loading: "-", maintenance: "500 mg IV drip 30 min q 6 hr หรือ 1 g IV drip 3 hr q 6-8 hr (1 g drip 1 hr q 8 hr)" },
+                    { crcl: "≥30 to <60", loading: "500 mg IV drip 30 min", maintenance: "500 mg IV drip 3 hr q 6-8 hr หรือ 250 mg IV drip 30 min q 6 hr" },
+                    { crcl: "≥15 to <30", loading: "500 mg or 1 g drip 1 hr", maintenance: "250 mg IV drip 30 min q 8 hr หรือ 500 mg IV drip 3 hr q 6-8 hr" },
+                    { crcl: "<15", loading: "ห้ามใช้", maintenance: "ไม่แนะนำให้ใช้เว้นแต่จะได้รับการทำ Hemodialysis ภายใน 48 hr" },
+                    { crcl: "HD", loading: "-", maintenance: "250 - 500 mg IV drip 3 hr q 12 hr (ในวัน HD ให้ยาหลังทำ HD)" },
+                    { crcl: "CAPD", loading: "-", maintenance: "250 - 500 mg IV drip 30 min q 12 hr" },
+                    { crcl: "CRRT", loading: "1 g + NSS 200 mL drip 1 hr", maintenance: "500 mg IV drip 30 min q 6-8 hr หรือ 250 mg drip 30 min q 6 hr" }
+                ],
+                administration: [
+                    "• Appropriate concentration: 5 mg/mL",
+                    "• สำหรับ IV infusion เท่านั้น ห้ามให้แบบ IV push",
+                    "• ให้ยาขนาด ≤500 mg โดย drip ใน 20 - 30 นาที",
+                    "• ให้ยาขนาด >500 mg โดย drip ใน 40 - 60 นาที",
+                    "• หากมีอาการคลื่นไส้อาเจียนระหว่างให้ยา ให้ลดอัตราการหยดยาลง"
+                ],
+                storage: [
+                    "• หลังผสม มีความคงตัว 4 ชั่วโมง ที่ 25 °C และ 24 ชั่วโมง ที่ 2-8 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "ciprofloxacin",
+                name: "Ciprofloxacin inj.",
+                strength: "200 mg/vial (100 mL)",
+                category: "Fluoroquinolones",
+                searchTerms: ["ciprofloxacin", "ซิโพรฟลอกซาซิน", "cipro", "200mg"],
+                weightGuide: [],
+                tableHeaders: ["CrCl (mL/min) / Condition", "ติดเชื้อ P. aeruginosa / A. baumannii", "การติดเชื้อแบคทีเรียชนิดอื่นๆ"],
+                dosingRows: [
+                    { crcl: "≥30 หรือ CRRT", loading: "Oral: 750 mg BID | IV: 400 mg IV drip 1 hr q 8 hr", maintenance: "Oral: 500 mg BID | IV: 400 mg IV drip 1 hr q 12 hr" },
+                    { crcl: "<30 หรือ CAPD", loading: "Oral: 750 mg OD | IV: 400 mg IV drip 1 hr q 12 hr", maintenance: "Oral: 500 mg OD | IV: 400 mg IV drip 1 hr q 24 hr" },
+                    { crcl: "HD", loading: "Oral: 750 mg OD (หลัง HD) | IV: 400 mg IV drip 1 hr q 12 hr", maintenance: "Oral: 500 mg OD (หลัง HD) | IV: 400 mg IV drip 1 hr q 24 hr (หลัง HD)" }
+                ],
+                administration: [
+                    "• Slow IV infusion over 60 minutes เข้าหลอดเลือดดำใหญ่ (เพื่อลดความเสี่ยงการระคายเคืองหลอดเลือด)",
+                    "• ยารูปแบบรับประทาน: หลีกเลี่ยงการทานพร้อมยาลดกรด แคลเซียม ธาตุเหล็ก ซิงค์ หรือแมกนีเซียม โดยรับประทานห่างกันอย่างน้อย 2 ชั่วโมง"
+                ],
+                storage: [
+                    "• For single use only"
+                ],
+                notes: []
+            },
+            {
+                id: "levofloxacin",
+                name: "Levofloxacin inj. & Tab",
+                strength: "Inj. 750 mg/vial | Tab 500 mg",
+                category: "Fluoroquinolones",
+                searchTerms: ["levofloxacin", "เลโวฟลอกซาซิน", "cravit", "750mg", "500mg"],
+                weightGuide: [],
+                tableHeaders: ["CrCl (mL/min)", "ข้อบ่งใช้อื่นๆ (H.pylori, STI, MAC, Prophylaxis)", "Intra-abdominal, Pneumonia, SSTI, UTI, S.maltophilia", "Treatment of Active TB (IV/PO)"],
+                dosingRows: [
+                    { crcl: "≥50", loading: "500 mg q 24 hr", maintenance: "750 mg q 24 hr", notes: "750 mg IV drip 2 hr q 24 hr (Oral 750 mg OD)" },
+                    { crcl: "20 to <50", loading: "500 mg then 250 mg q 24 hr", maintenance: "750 mg q 48 hr", notes: "750 mg IV drip 2 hr q 48 hr (Oral 750 mg q 48h)" },
+                    { crcl: "<20", loading: "500 mg then 250 mg q 48 hr", maintenance: "750 mg then 500 mg q 48 hr", notes: "750 mg drip 2 hr q 48 hr" },
+                    { crcl: "HD", loading: "500 mg then 250 mg q 48 hr", maintenance: "750 mg then 500 mg q 48 hr", notes: "750 mg drip 2 hr then 500 mg drip 1 hr q 48 hr (หรือ 750 mg 3 ครั้ง/wk หลัง HD)" },
+                    { crcl: "CAPD", loading: "500 mg then 250 mg q 48 hr", maintenance: "750 mg then 500 mg q 48 hr", notes: "750 mg drip 2 hr then 500 mg drip 1 hr q 48 hr" },
+                    { crcl: "CRRT", loading: "500 mg then 250 mg q 24 hr หรือ 500 mg q 48 hr", maintenance: "750 mg then 500 mg q 24 hr / q 48 hr", notes: "ตามดุลยพินิจแพทย์" }
+                ],
+                administration: [
+                    "• แนะนำ IV infusion เพื่อป้องกันการเกิด QT prolongation ดังนี้:",
+                    "  - Infuse 250 - 500 mg IV solution over 60 min",
+                    "  - Infuse 750 mg IV solution over 90 min",
+                    "• ยารับประทาน: เว้นระยะห่างจากยาลดกรด แคลเซียม เหล็ก ซิงค์ แมกนีเซียม อย่างน้อย 2 ชั่วโมง"
+                ],
+                storage: [
+                    "• เก็บให้พ้นแสง"
+                ],
+                notes: ["*กรณี Severe infections & GFR >80 mL/min/1.73m² อาจพิจารณา 500 mg q 12 hr เพื่อให้ได้เป้าหมาย PD เมื่อ MIC ≥0.5 mg/L"]
+            },
+            {
+                id: "vancomycin",
+                name: "Vancomycin inj.",
+                strength: "500 mg/vial",
+                category: "Glycopeptides/Lipopeptides",
+                searchTerms: ["vancomycin", "แวนโคไมซิน", "vanco", "500mg"],
+                weightGuide: [
+                    "• การคำนวณขนาดยาใช้น้ำหนัก Actual body weight (ABW)",
+                    "• Loading dose: 25 - 30 mg/kg (Maximum 3 g/dose)",
+                    "• Maintenance dose: Maximum 4.5 g/day"
+                ],
+                tableHeaders: ["CrCl (mL/min)", "Loading Dose", "Maintenance Dose"],
+                dosingRows: [
+                    { crcl: ">100", loading: "25-30 mg/kg", maintenance: "15-20 mg/kg IV q 8-12 hr" },
+                    { crcl: ">50-100", loading: "25-30 mg/kg", maintenance: "15-20 mg/kg IV q 12 hr" },
+                    { crcl: "20-50", loading: "25-30 mg/kg", maintenance: "15-20 mg/kg IV q 24 hr" },
+                    { crcl: "<20", loading: "25-30 mg/kg", maintenance: "15-20 mg/kg IV q 48 hr" },
+                    { crcl: "HD (Low Flux)", loading: "25 mg/kg (หลัง HD) / 30 mg/kg (ใน 1 hr สุดท้ายของ HD)", maintenance: "7.5 mg/kg 3 ครั้ง/สัปดาห์" },
+                    { crcl: "HD (High Flux)", loading: "25 mg/kg (หลัง HD) / 35 mg/kg (ใน 1 hr สุดท้ายของ HD)", maintenance: "10-15 mg/kg 3 ครั้ง/สัปดาห์" },
+                    { crcl: "CRRT", loading: "25-30 mg/kg", maintenance: "7.5 - 10 mg/kg IV q 12 hr" },
+                    { crcl: "CAPD", loading: "20-25 mg/kg", maintenance: "7.5 mg/kg IV q 48-96 hr" }
+                ],
+                administration: [
+                    "• Maximum rate: 10 mg/min (เพื่อลดเสี่ยง Red man syndrome)",
+                    "• Maximum concentration: 5 mg/mL (ผู้ป่วยจำกัดน้ำให้ได้ถึง 10 mg/mL)",
+                    "• ตัวอย่างการ drip:",
+                    "  - Vancomycin 1,000 mg + NSS/D5W 200 mL IV drip in 2 hr",
+                    "  - Vancomycin 1,500 mg + NSS/D5W 300 mL IV drip in 3 hr",
+                    "  - Vancomycin 2,000 mg + NSS/D5W 400 mL IV drip in 3 hr"
+                ],
+                storage: [
+                    "• หลังผสมอาจพบว่าเป็นสีใส หรือสีเหลืองอ่อนเป็นปกติ"
+                ],
+                notes: ["*แนะนำให้ทำ Therapeutic Drug Monitoring (TDM) เพื่อปรับระดับยา"]
+            },
+            {
+                id: "ceftazidime",
+                name: "Ceftazidime inj.",
+                strength: "1 g/vial",
+                category: "Cephalosporins/Beta-lactams",
+                searchTerms: ["ceftazidime", "เซฟตาซิไดม์", "fortum", "1g"],
+                weightGuide: [],
+                tableHeaders: ["CrCl (mL/min)", "Loading Dose", "Maintenance Dose"],
+                dosingRows: [
+                    { crcl: ">50", loading: "-", maintenance: "2 g + NSS/D5W 100 mL IV drip in 30 min q 8 hr" },
+                    { crcl: "31-50", loading: "-", maintenance: "2 g + NSS/D5W 100 mL IV drip in 30 min q 8-12 hr" },
+                    { crcl: "16-30", loading: "-", maintenance: "2 g + NSS/D5W 100 mL IV drip in 30 min q 24 hr" },
+                    { crcl: "≤15", loading: "2 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "1 g + NSS/D5W 100 mL IV drip in 30 min q 24 hr" },
+                    { crcl: "HD", loading: "2 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "1-2 g + NSS/D5W 100 mL IV drip in 30 min q 24 hr (วัน HD ให้หลัง HD)" },
+                    { crcl: "CAPD", loading: "2 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "1 g + NSS/D5W 50 mL IV drip in 30 min q 24 hr" },
+                    { crcl: "CRRT", loading: "2 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "2 g + NSS/D5W 100 mL IV drip in 1 hr q 8-12 hr" }
+                ],
+                administration: [
+                    "• Ceftazidime 2 g q 6 hr พิจารณาเฉพาะกรณี severe infection, Melioidosis, Cystic fibrosis (P. aeruginosa), Elevated MIC หรือ ARC (CrCl ≥130)",
+                    "• สามารถ drip in 3-4 hr เพื่อเพิ่มประสิทธิภาพของยาได้",
+                    "• Approximate concentration ≤ 40 mg/mL"
+                ],
+                storage: [
+                    "• หลังผสมด้วย SWFI, NSS, D5W อยู่ได้นาน 48 ชั่วโมง ที่ 2-8 °C และ 24 ชั่วโมง ที่ 30±2 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "ceftazidime-avibactam",
+                name: "Ceftazidime 2 g & Avibactam 0.5 g inj.",
+                strength: "2.5 g/vial (Ceftazidime 2g + Avibactam 0.5g)",
+                category: "Cephalosporins/Beta-lactams",
+                searchTerms: ["zavicefta", "ceftazidime avibactam", "เซฟตาซิไดม์ อาวิแบคแทม", "2.5g"],
+                weightGuide: [],
+                tableHeaders: ["CrCl (mL/min)", "Loading Dose", "Maintenance Dose"],
+                dosingRows: [
+                    { crcl: ">50", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "2.5 g + NSS/D5W 100 mL IV drip in 2-3 hr q 8 hr" },
+                    { crcl: "31-50", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "1.25 g + NSS/D5W 100 mL IV drip in 2-3 hr q 8 hr" },
+                    { crcl: "16-30", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "0.94 g + NSS/D5W 100 mL IV drip in 2-3 hr q 12 hr" },
+                    { crcl: "6-15", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "0.94 g + NSS/D5W 100 mL IV drip in 2-3 hr q 24 hr" },
+                    { crcl: "≤5", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "0.94 g + NSS/D5W 100 mL IV drip in 2-3 hr q 48 hr" },
+                    { crcl: "HD / CAPD", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "0.94 g + NSS/D5W 100 mL IV q 48 hr (ในวัน HD ให้ยาหลัง HD)" },
+                    { crcl: "CRRT", loading: "2.5 g + NSS/D5W 100 mL", maintenance: "CVVH: 1.25 g drip 3 hr q 8 hr | CVVHDF: 2.5 g drip 3 hr q 8 hr" }
+                ],
+                administration: [
+                    "• Final concentration ของ Ceftazidime 8 - 40 mg/mL",
+                    "• มี half-life สั้น (~2 hr) ถึง steady-state เร็วใน 2-3 dose กรณี q 8 hr ไม่จำเป็นต้องให้ loading dose แต่ผู้ป่วยวิกฤตพิจารณาให้ได้",
+                    "• Administer by intermittent infusion over 2 hr (ขยายเป็น 3 hr สำหรับ CRE, P. aeruginosa ดื้อยา, S. maltophilia)"
+                ],
+                storage: [
+                    "• ความเข้มข้น >8 - 40 mg/mL เก็บที่อุณหภูมิไม่เกิน 25 °C อยู่ได้นาน 4 ชั่วโมง ใน Infusion bag"
+                ],
+                notes: []
+            },
+            {
+                id: "piperacillin-tazobactam",
+                name: "Piperacillin 4 g & Tazobactam 0.5 g inj.",
+                strength: "4.5 g/vial",
+                category: "Cephalosporins/Beta-lactams",
+                searchTerms: ["piperacillin", "tazobactam", "pip-tazo", "ไพเพอราซิลลิน", "zosyn", "4.5g"],
+                weightGuide: ["Maximum dose: 18 g/day"],
+                tableHeaders: ["CrCl (mL/min)", "Anti-P. aeruginosa / Nosocomial", "Severe Infection / เชื้อดื้อยา ESBLs", "Mild to Moderate Infection"],
+                dosingRows: [
+                    { crcl: "≥40", loading: "4.5 g drip 30 min q 6 hr", maintenance: "4.5 g + NSS/D5W 100 mL IV drip in 4 hr q 6 hr", notes: "3.375 g drip 30 min q 6 hr" },
+                    { crcl: "20 - <40", loading: "3.375 g drip 30 min q 6 hr", maintenance: "3.375 g IV drip in 4 hr q 8-12 hr หรือ 4.5 g drip 4 hr q 8 hr", notes: "2.25 g drip 30 min q 6 hr" },
+                    { crcl: "<20", loading: "2.25 g drip 30 min q 6 hr", maintenance: "3.375 g IV drip in 4 hr q 12 hr หรือ 4.5 g drip 4 hr q 12 hr", notes: "2.25 g drip 30 min q 8 hr" },
+                    { crcl: "HD", loading: "2.25 g drip 30 min q 8-12 hr", maintenance: "4.5 g IV drip in 4 hr q 12 hr (ให้ยาหลัง HD)", notes: "2.25 g drip 30 min q 8 hr (+0.75g AD)" },
+                    { crcl: "CAPD", loading: "2.25 g drip 30 min q 8 hr", maintenance: "No data", notes: "2.25 g drip 30 min q 12 hr" },
+                    { crcl: "SLED", loading: "4.5 g IV drip in 30 min q 8 hr (May use extended infusion)", maintenance: "4.5 g IV drip in 30 min q 8 hr", notes: "-" },
+                    { crcl: "CRRT", loading: "4.5 g drip 30 min q 6-8 hr", maintenance: "4.5 g IV drip in 4 hr q 8 hr", notes: "2.25 g drip 30 min q 6 hr" }
+                ],
+                administration: [
+                    "• ปริมาตร SWFI ต่อ dose ที่มากที่สุดที่แนะนำ คือ 50 mL และเจือจางต่อจนได้ปริมาตร 50 - 150 mL",
+                    "• สามารถให้แบบ Extended infusion (drip in 4 hr) เพื่อเพิ่มเป้าหมายทางเภสัชพลศาสตร์"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้นาน 24 ชั่วโมง ที่อุณหภูมิ 20-30 °C และ 48 ชั่วโมง ที่อุณหภูมิ 2-8 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "cefoperazone-sulbactam",
+                name: "Cefoperazone 1 g & Sulbactam 0.5 g inj.",
+                strength: "1.5 g/vial (Ratio 2:1)",
+                category: "Cephalosporins/Beta-lactams",
+                searchTerms: ["cefoperazone", "sulbactam", "sulperazon", "เซโฟเพอราโซน", "ซัลแบคแตม", "1.5g"],
+                weightGuide: [
+                    "• Maximum dose: Cefoperazone 12 g/day และ Sulbactam 12 g/day",
+                    "• หากต้องการ Sulbactam ขนาดสูงใน A. baumannii MDR ควรระวัง Cefoperazone เกินขนาด ( Child-Pugh Class C แนะนำ Cefoperazone ไม่เกิน 2 g/day)"
+                ],
+                tableHeaders: ["CrCl (mL/min)", "Non-A. baumannii MDR", "A. baumannii MDR (Sulbactam high dose)"],
+                dosingRows: [
+                    { crcl: "≥30", loading: "4.5 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "4.5 g IV drip 4 hr q 6 hr (Cefo 12g/Sul 6g)" },
+                    { crcl: "15-29 หรือ CRRT", loading: "4.5 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "4.5 g IV drip 4 hr q 8 hr (Cefo 9g/Sul 4.5g) หรือ 3 g drip 4 hr q 6 hr" },
+                    { crcl: "<15 / HD / CAPD", loading: "3 g + NSS/D5W 100 mL IV drip 30 min", maintenance: "3 g IV drip 4 hr q 8 hr (Cefo 6g/Sul 3g) หรือ 3 g drip 4 hr q 12 hr" }
+                ],
+                administration: [
+                    "• Maximum concentration: Cefoperazone 10-250 mg/mL, Sulbactam 5-125 mg/mL",
+                    "• Cefoperazone/Sulperazone >4.5 g/day ควร add Vitamin K 10 mg IV/week เพื่อป้องกันภาวะ hypoprothrombinemia / coagulopathy โดยเริ่มหลังให้ยาแล้ว 3 วัน"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้นาน 24 ชั่วโมง ที่อุณหภูมิ 25 °C และ 72 ชั่วโมง ที่อุณหภูมิ 2-8 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "ampicillin-sulbactam",
+                name: "Ampicillin 2 g & Sulbactam 1 g inj.",
+                strength: "3 g/vial (Ratio 2:1)",
+                category: "Cephalosporins/Beta-lactams",
+                searchTerms: ["ampicillin", "sulbactam", "unasyn", "แอมพิซิลลิน", "3g"],
+                weightGuide: ["Maximum dose: Ampicillin/Sulbactam 12 g/day"],
+                tableHeaders: ["CrCl (mL/min)", "Severe Gram-neg bacilli / Susceptible", "VAP (A. baumannii MDR Combination)"],
+                dosingRows: [
+                    { crcl: "≥30 (CrCl >90)", loading: "3 g drip 30 min q 6 hr", maintenance: "9 g + NSS/D5W 100 mL IV drip in 4 hr q 8 hr (Amp 18g/Sul 9g)" },
+                    { crcl: "60-89", loading: "3 g drip 30 min q 6 hr", maintenance: "6 g + NSS/D5W 100 mL IV drip in 4 hr q 8 hr (Amp 12g/Sul 6g)" },
+                    { crcl: "30-59", loading: "3 g drip 30 min q 6 hr", maintenance: "3 g + NSS/D5W 100 mL IV drip in 4 hr q 6 hr (Amp 8g/Sul 4g)" },
+                    { crcl: "15-29 หรือ CRRT", loading: "1.5 g drip 30 min q 12 hr", maintenance: "3 g + NSS/D5W 100 mL IV drip in 4 hr q 8 hr (Amp 6g/Sul 3g)" },
+                    { crcl: "<15 / HD / CAPD", loading: "1.5 g drip 30 min q 24 hr", maintenance: "3 g + NSS/D5W 100 mL IV drip in 4 hr q 12 hr (Amp 4g/Sul 2g)" }
+                ],
+                administration: [
+                    "• Final concentration 3 - 45 mg/mL",
+                    "• ผสมใน NSS จะมีความคงตัวดีกว่า D5W"
+                ],
+                storage: [
+                    "• หลังผสมใน NSS อยู่ได้นาน 8 ชั่วโมง ที่ 25 °C และ 48 ชั่วโมง ที่ 2-8 °C",
+                    "• หลังผสมใน D5W อยู่ได้นานเพียง 2 ชั่วโมง ที่ 25 °C และ 4 ชั่วโมง ที่ 2-8 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "colistin",
+                name: "Colistin inj.",
+                strength: "150 mg CBA/vial (Colistin Base Activity)",
+                category: "Polymyxins/Others",
+                searchTerms: ["colistin", "โคลิสติน", "colistimethate", "150mg"],
+                weightGuide: [
+                    "• Loading dose: 300 mg (CBA) + NSS/D5W 100 mL IV drip in 30 min"
+                ],
+                tableHeaders: ["CrCl (mL/min)", "Loading Dose", "Maintenance Dose"],
+                dosingRows: [
+                    { crcl: ">80", loading: "300 mg IV drip 30 min", maintenance: "150 mg + NSS/D5W 50 mL IV drip in 1 hr q 8-12 hr" },
+                    { crcl: "41-80", loading: "300 mg IV drip 30 min", maintenance: "150 mg + NSS/D5W 50 mL IV drip in 1 hr q 12 hr" },
+                    { crcl: "21-40", loading: "300 mg IV drip 30 min", maintenance: "100 mg + NSS/D5W 50 mL IV drip in 1 hr q 12 hr" },
+                    { crcl: "≤20", loading: "300 mg IV drip 30 min", maintenance: "150 mg + NSS/D5W 50 mL IV drip in 1 hr q 24 hr" },
+                    { crcl: "HD", loading: "300 mg IV drip 30 min", maintenance: "150 mg q 24 hr (วันไม่มี HD) | 200 mg drip 1 hr q 24 hr (วัน HD ให้หลัง HD)" },
+                    { crcl: "SLED", loading: "300 mg IV drip 30 min", maintenance: "150 mg q 24 hr (วันไม่มี HD) | 150 mg drip 1 hr q 12 hr (วัน HD ให้หลัง HD)" },
+                    { crcl: "CRRT", loading: "300 mg IV drip 30 min", maintenance: "150 mg + NSS/D5W 50 mL IV drip in 1 hr q 8 hr" },
+                    { crcl: "CAPD", loading: "300 mg IV drip 30 min", maintenance: "100 mg + NSS/D5W 50 mL IV drip in 1 hr q 24 hr" }
+                ],
+                administration: [
+                    "• Appropriate concentration: 75 mg/mL",
+                    "• บริหารโดยการ IV drip ใน 1 ชั่วโมง"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้ 24 ชั่วโมงที่อุณหภูมิห้อง แต่เอกสารกำกับยาแนะนำว่ายาที่เจือจางแล้วควรใช้ทันที"
+                ],
+                notes: []
+            },
+            {
+                id: "sulbactam",
+                name: "Sulbactam inj.",
+                strength: "2 g/vial",
+                category: "Cephalosporins/Beta-lactams",
+                searchTerms: ["sulbactam", "ซัลแบคแตม", "2g"],
+                weightGuide: [
+                    "• Max concentration: 80 mg/mL",
+                    "• พิจารณา Loading dose โดยบริหาร IV drip in 30 min"
+                ],
+                tableHeaders: ["Serum Albumin (g/dL)", "MIC (mcg/mL)", "CrCl 90-120 mL/min", "CrCl 60-89 / CAPD", "CrCl 30-59 / CRRT", "CrCl 15-29 / HD"],
+                dosingRows: [
+                    { crcl: "1.7 - 2.4", loading: "MIC 4", maintenance: "1 g q 8 hr", notes: "1 g q 8-12 hr | 1 g q 12 hr | 1 g q 12 hr" },
+                    { crcl: "1.7 - 2.4", loading: "MIC 8-16", maintenance: "2 g q 6 hr หรือ 3 g q 8 hr", notes: "1 g q 6-8 hr | 1 g q 6-8 hr | 1 g q 8 hr" },
+                    { crcl: "1.7 - 2.4", loading: "MIC 32-64", maintenance: "3 g q 6 hr", notes: "3 g q 6 hr | 2 g q 6-8 hr | 1-2 g q 6-8 hr" },
+                    { crcl: "2.5 - 3.2", loading: "MIC 4-8", maintenance: "1-2 g q 6-8 hr", notes: "1 g q 6-8 hr | 1 g q 6-8 hr | 1 g q 8 hr" },
+                    { crcl: "2.5 - 3.2", loading: "MIC 16-32", maintenance: "3 g q 6 hr", notes: "3 g q 6-8 hr | 2-3 g q 6-8 hr | 2 g q 8 hr" }
+                ],
+                administration: [
+                    "• แนะนำผสมใน D5W, NSS หรือ Lactated Ringer's solution",
+                    "• Dosing regimen สำหรับ Drip in 4 hr"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้นาน 24-48 ชั่วโมง ที่ 25-30 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "fosfomycin",
+                name: "Fosfomycin inj.",
+                strength: "4 g/vial",
+                category: "Polymyxins/Others",
+                searchTerms: ["fosfomycin", "ฟอสโฟไมซิน", "4g"],
+                weightGuide: [
+                    "• Maximum dose: 8 g/dose",
+                    "• Max concentration: 50 - 100 mg/mL",
+                    "• ยา Fosfomycin IV เป็นเกลือ Disodium (Fosfomycin 1 g มี Na = 14.4 mEq) แนะนำผสมใน D5W เท่านั้น"
+                ],
+                tableHeaders: ["CrCl (mL/min)", "Loading Dose", "Maintenance Dose"],
+                dosingRows: [
+                    { crcl: "≥80", loading: "4-8 g + D5W 100-200 mL IV drip 30 min", maintenance: "16-24 g/day (4 g q 6h หรือ 6-8 g q 8h drip 1-4 hr)" },
+                    { crcl: "50-79", loading: "3-6 g + D5W 100-150 mL IV drip 30 min", maintenance: "12-18 g/day (3-4 g drip 1-4 hr q 6-8 hr)" },
+                    { crcl: "15-49", loading: "3-4 g + D5W 100 mL IV drip 30 min", maintenance: "8-12 g/day (3-4 g drip 1-4 hr q 6-12 hr)" },
+                    { crcl: "<15", loading: "3 g + D5W 100 mL IV drip 30 min", maintenance: "4-6 g/day (3 g drip 1-4 hr q 12 hr)" },
+                    { crcl: "HD / CAPD", loading: "4 g + D5W 100 mL IV drip 30 min", maintenance: "2-4 g + D5W 100 mL IV drip 1-4 hr 3 ครั้ง/wk (หลัง HD) / q 48 hr (CAPD)" },
+                    { crcl: "CRRT", loading: "6-8 g + D5W 150-200 mL IV drip 30 min", maintenance: "6-8 g + D5W 150-200 mL IV drip in 1-4 hr q 12 hr" }
+                ],
+                administration: [
+                    "• Reconstitute 2 g หรือ 4 g ด้วย solvent 20 mL ก่อนเจือจางใน D5W เพิ่มอีก 80 mL",
+                    "• สำหรับผู้ป่วยเสี่ยงเกิด Hypokalemia พิจารณาให้ขนาดต่ำแต่เพิ่มความถี่",
+                    "• ติดตามค่า Serum Na+, K+ ทุก 3 วัน (ยามักทำให้เกิด Hypernatremia / Hypokalemia)"
+                ],
+                storage: [
+                    "• หลังผสม อยู่ได้นาน 7 วัน ที่ 25 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "co-trimoxazole",
+                name: "Co-trimoxazole (TMP/SMX) inj.",
+                strength: "Trimethoprim 80 mg + Sulfamethoxazole 400 mg / Amp",
+                category: "Polymyxins/Others",
+                searchTerms: ["cotrimoxazole", "bactrim", "tmp-smx", "โคไตรมอกซาโซน", "แบคตรีม"],
+                weightGuide: [
+                    "• หาก BMI ≥30 kg/m² พิจารณาใช้ Adjusted body weight (ABW)"
+                ],
+                tableHeaders: ["ข้อบ่งใช้ / สภาวะไต", "การปรับตาม CrCl", "Dosing Regimen แนะนำ (Based on TMP)"],
+                dosingRows: [
+                    { crcl: "CrCl >30 หรือ CRRT", loading: "ไม่จำเป็นต้องปรับขนาดยา", maintenance: "ตามข้อบ่งใช้ปกติ" },
+                    { crcl: "CrCl ≤30 / CAPD / HD", loading: "ลดขนาดยาลง 50%", maintenance: "วัน HD ให้ยาหลังทำ HD" },
+                    { crcl: "Melioidosis (Initial)", loading: "CrCl >30", maintenance: "BW <40kg: 160mg BID | BW 40-60kg: 240mg BID | BW >60kg: 320mg BID (Duration ≥14d)" },
+                    { crcl: "PCP Treatment", loading: "CrCl >30", maintenance: "IV/PO: 15-20 mg/kg/day (ของ TMP) แบ่งให้ 3-4 ครั้ง/วัน นาน 21 วัน" },
+                    { crcl: "S. maltophilia", loading: "CrCl >30", maintenance: "Oral/IV: 10-15 mg/kg/day แบ่งให้ 2-3 ครั้ง/วัน (Mod-Severe) หรือ 8-12 mg/kg/day" }
+                ],
+                administration: [
+                    "• แนะนำผสมในสารละลาย Dextrose (D5W) เท่านั้น ห้ามผสมใน NSS (ตกตะกอนง่าย)",
+                    "• เจือจาง: ยา 5 mL ผสมใน D5W 125 mL (หรืออย่างน้อย 1 amp ใน D5W 75-100 mL drip in 60-90 min)"
+                ],
+                storage: [
+                    "• ใช้ทันทีไม่ควรเกิน 2 ชั่วโมงหลังผสม",
+                    "• ห้ามนำยาที่ผสมแล้วแช่ตู้เย็น (จะเกิดการตกตะกอน)"
+                ],
+                notes: []
+            },
+            {
+                id: "tigecycline",
+                name: "Tigecycline inj.",
+                strength: "50 mg/vial",
+                category: "Polymyxins/Others",
+                searchTerms: ["tigecycline", "ไทจีไซคลิน", "tygacil", "50mg"],
+                weightGuide: [],
+                tableHeaders: ["Child-Turcotte-Pugh Class", "MDR A. baumannii Infection", "Non-resistant Bacterial Infection"],
+                dosingRows: [
+                    { crcl: "Class A - B", loading: "200 mg IV drip 30 min then 100 mg IV drip 1 hr q 12 hr", maintenance: "100 mg IV drip 30 min then 50 mg IV drip 1 hr q 12 hr" },
+                    { crcl: "Class C (Severe Hepatic)", loading: "200 mg drip 30 min then 50 mg drip 1 hr q 12 hr", maintenance: "100 mg drip 30 min then 25 mg drip 1 hr q 12 hr" }
+                ],
+                administration: [
+                    "• ผสมด้วย NSS, D5W หรือ Lactated Ringer's ปริมาณ 5.3 mL ได้ความเข้มข้น 10 mg/mL จากนั้นดูดมา 5 mL ผสมใน IV bag 100 mL drip in 30-60 min",
+                    "• หลีกเลี่ยงการให้พร้อมกับ Amphotericin B, Diazepam, Esomeprazole และ Omeprazole"
+                ],
+                storage: [
+                    "• ความคงตัวหลังผสมใน IV bag อยู่ได้นาน 48 ชั่วโมง ที่ 2-8 °C และ 24 ชั่วโมง ที่ 25 °C"
+                ],
+                notes: []
+            },
+            {
+                id: "amphotericin-b",
+                name: "Amphotericin B & Liposomal Amphotericin B",
+                strength: "Amphotericin B 50 mg/vial | Liposomal 50 mg/vial",
+                category: "Antifungals",
+                searchTerms: ["amphotericin", "ambisome", "แอมโฟเทอริซิน", "antifungal", "50mg"],
+                weightGuide: [
+                    "• Amphotericin B Conventional: คำนวณตาม Adjusted Body Weight (ABW) แต่กรณี severe infection ใช้ Actual body weight ได้",
+                    "• Liposomal Amphotericin B: คำนวณตาม Actual Body Weight (ABW)",
+                    "• Maximum dose: Conventional Amphotericin B ไม่เกิน 1.5 mg/kg/day"
+                ],
+                tableHeaders: ["ชนิดยา (Formulation)", "Invasive Aspergillosis", "Invasive Candidiasis", "Cryptococcosis (CNS / Non-CNS)"],
+                dosingRows: [
+                    { crcl: "Amphotericin B (Deoxycholate)", loading: "1 - 1.5 mg/kg IV drip in 6 hr OD", maintenance: "0.5 - 1 mg/kg IV drip in 6 hr OD", notes: "Induction: 0.7 - 1 mg/kg IV drip 6 hr OD + Flucytosine 2 wk" },
+                    { crcl: "Liposomal Amphotericin B", loading: "3 - 6 mg/kg IV drip in 2 hr OD", maintenance: "3 - 6 mg/kg IV drip in 2 hr OD", notes: "Cryptococcal meningitis: 3-4 mg/kg IV drip 2 hr OD" }
+                ],
+                administration: [
+                    "• ผสมด้วย D5W เท่านั้น ห้ามใช้น้ำเกลือ NSS หรือสารละลายอื่นที่มีเกลือ",
+                    "• Max concentration: Conventional ≤0.1 mg/mL | Liposomal 1-2 mg/mL",
+                    "• Premedication Regimen (เพื่อลดปฏิกิริยาข้างเคียง):",
+                    "  1. Hydration: NSS 1,000 mL IV drip 1-2 hr ก่อนให้ยา (ถ้ามีภาวะน้ำเกินลดเหลือ NSS 500 mL)",
+                    "  2. Paracetamol 500 mg 1 tab ก่อนให้ยา 30 นาที",
+                    "  3. CPM 10 mg IV ก่อนให้ยา 30 นาที",
+                    "• พิจารณาส่งตรวจ Scr, Mg, K และ CBC Baseline ก่อนสั่งใช้ยา"
+                ],
+                storage: [
+                    "• Amphotericin B Conventional: Reconstituted & Diluted อยู่ได้ 24 ชั่วโมง ที่ 2-8 °C",
+                    "• Liposomal Amphotericin B: Reconstituted อยู่ได้ 24 hr ที่ 2-8 °C | Diluted Product อยู่ได้ 6 hr ที่ 2-8 °C"
+                ],
+                notes: []
+            }
+        ];
+
+        // Global State variables
+        let currentSearchQuery = "";
+        let currentCategory = "ALL";
+        let currentRenalFilter = "ALL";
+
+        // DOM Elements
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const categoryFilter = document.getElementById('category-filter');
+        const renalFilter = document.getElementById('renal-filter');
+        const drugListContainer = document.getElementById('drug-list-container');
+        const emptyState = document.getElementById('empty-state');
+        const totalCountEl = document.getElementById('total-drugs-count');
+
+        // Modal Elements
+        const modal = document.getElementById('drug-modal');
+        const modalCategory = document.getElementById('modal-category');
+        const modalDrugName = document.getElementById('modal-drug-name');
+        const modalDrugStrength = document.getElementById('modal-drug-strength');
+        const modalAlertBox = document.getElementById('modal-alert-box');
+        const modalAlertText = document.getElementById('modal-alert-text');
+        const modalWeightSection = document.getElementById('modal-weight-section');
+        const modalWeightContent = document.getElementById('modal-weight-content');
+        const modalTableHeader = document.getElementById('modal-table-header');
+        const modalTableBody = document.getElementById('modal-table-body');
+        const modalAdminContent = document.getElementById('modal-admin-content');
+        const modalStorageContent = document.getElementById('modal-storage-content');
+        const modalNotesSection = document.getElementById('modal-notes-section');
+        const modalNotesContent = document.getElementById('modal-notes-content');
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDrugCards();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            searchInput.addEventListener('input', (e) => {
+                currentSearchQuery = e.target.value.trim().toLowerCase();
+                clearSearchBtn.classList.toggle('hidden', currentSearchQuery === '');
+                renderDrugCards();
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                currentSearchQuery = '';
+                clearSearchBtn.classList.add('hidden');
+                renderDrugCards();
+            });
+
+            categoryFilter.addEventListener('change', (e) => {
+                currentCategory = e.target.value;
+                renderDrugCards();
+            });
+
+            renalFilter.addEventListener('change', (e) => {
+                currentRenalFilter = e.target.value;
+                renderDrugCards();
+            });
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            categoryFilter.value = cat;
+            renderDrugCards();
+        }
+
+        function resetFilters() {
+            searchInput.value = '';
+            currentSearchQuery = '';
+            currentCategory = 'ALL';
+            currentRenalFilter = 'ALL';
+            categoryFilter.value = 'ALL';
+            renalFilter.value = 'ALL';
+            clearSearchBtn.classList.add('hidden');
+            renderDrugCards();
+        }
+
+        // Filter and Render Drug Cards
+        function renderDrugCards() {
+            const filtered = DRUG_DATABASE.filter(drug => {
+                // Category match
+                const matchCategory = (currentCategory === 'ALL' || drug.category === currentCategory);
+                
+                // Search term match
+                const matchSearch = currentSearchQuery === '' || 
+                    drug.name.toLowerCase().includes(currentSearchQuery) ||
+                    drug.strength.toLowerCase().includes(currentSearchQuery) ||
+                    drug.searchTerms.some(term => term.toLowerCase().includes(currentSearchQuery));
+
+                // Renal Filter Match (Checking if drug has rows matching renal keyword)
+                let matchRenal = true;
+                if (currentRenalFilter !== 'ALL') {
+                    const filterKey = currentRenalFilter;
+                    matchRenal = drug.dosingRows.some(row => {
+                        const crclText = row.crcl.toUpperCase();
+                        if (filterKey === 'HD') return crclText.includes('HD');
+                        if (filterKey === 'CAPD') return crclText.includes('CAPD');
+                        if (filterKey === 'CRRT') return crclText.includes('CRRT') || crclText.includes('SLED');
+                        if (filterKey === 'SEVERE') return crclText.includes('<10') || crclText.includes('<15') || crclText.includes('<20') || crclText.includes('15-29') || crclText.includes('10-25');
+                        if (filterKey === 'MODERATE') return crclText.includes('30') || crclText.includes('40') || crclText.includes('50') || crclText.includes('21-40') || crclText.includes('26-50');
+                        if (filterKey === 'NORMAL') return crclText.includes('>80') || crclText.includes('>50') || crclText.includes('≥60') || crclText.includes('≥80');
+                        return true;
+                    });
+                }
+
+                return matchCategory && matchSearch && matchRenal;
+            });
+
+            totalCountEl.textContent = filtered.length;
+            drugListContainer.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach(drug => {
+                const card = createDrugCardHTML(drug);
+                drugListContainer.appendChild(card);
+            });
+        }
+
+        // Generate Drug Card DOM Element
+        function createDrugCardHTML(drug) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 transition-all overflow-hidden flex flex-col';
+
+            // Preview 2 dosing rows
+            const previewRows = drug.dosingRows.slice(0, 3);
+
+            card.innerHTML = `
+                <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-slate-50 to-white">
+                    <div class="flex items-start gap-3">
+                        <div class="p-3 bg-teal-50 text-teal-700 rounded-xl border border-teal-100 text-lg flex-shrink-0">
+                            <i class="fa-solid fa-vial-circle-check"></i>
+                        </div>
+                        <div>
+                            <span class="inline-block bg-slate-100 text-slate-600 text-[11px] font-semibold px-2 py-0.5 rounded mb-1">${drug.category}</span>
+                            <h3 class="text-lg font-bold text-slate-800 leading-snug">${drug.name}</h3>
+                            <p class="text-xs font-mono text-teal-700 mt-0.5"><i class="fa-solid fa-box-archive mr-1"></i> ${drug.strength}</p>
+                        </div>
+                    </div>
+                    <button onclick="openModal('${drug.id}')" class="self-start sm:self-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs sm:text-sm font-medium transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-clipboard-list"></i> ดูขนาดยาฉบับเต็ม
+                    </button>
+                </div>
+
+                <!-- Quick Summary Preview -->
+                <div class="p-5 space-y-3 text-xs text-slate-600 flex-grow">
+                    <div>
+                        <span class="font-bold text-slate-700 uppercase tracking-wider text-[10px] block mb-1">ตัวอย่างการปรับขนาดยา (Dosing Preview):</span>
+                        <div class="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-slate-100 text-slate-600 font-semibold text-[11px]">
+                                    <tr>
+                                        <th class="p-2 border-r border-slate-200 w-1/3">CrCl / Condition</th>
+                                        <th class="p-2">Dose / Admin</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    ${previewRows.map(r => `
+                                        <tr>
+                                            <td class="p-2 font-semibold text-slate-700 border-r border-slate-200">${r.crcl}</td>
+                                            <td class="p-2 text-slate-600">${r.maintenance || r.loading || '-'}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1">
+                        <div class="bg-teal-50/50 p-2.5 rounded-lg border border-teal-100/60">
+                            <strong class="text-teal-900 block mb-0.5"><i class="fa-solid fa-syringe text-teal-600 mr-1"></i> การบริหารยา:</strong>
+                            <p class="line-clamp-2 text-slate-600 text-[11px]">${drug.administration[0] || 'ตามเอกสารกำกับยา'}</p>
+                        </div>
+                        <div class="bg-blue-50/50 p-2.5 rounded-lg border border-blue-100/60">
+                            <strong class="text-blue-900 block mb-0.5"><i class="fa-solid fa-snowflake text-blue-600 mr-1"></i> การเก็บรักษา:</strong>
+                            <p class="line-clamp-2 text-slate-600 text-[11px]">${drug.storage[0] || 'เก็บตามมาตรฐาน'}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Open Modal and Populate Details
+        function openModal(drugId) {
+            const drug = DRUG_DATABASE.find(d => d.id === drugId);
+            if (!drug) return;
+
+            modalCategory.textContent = drug.category;
+            modalDrugName.textContent = drug.name;
+            modalDrugStrength.textContent = `Strength: ${drug.strength}`;
+
+            // Weight guidance section
+            if (drug.weightGuide && drug.weightGuide.length > 0) {
+                modalWeightSection.classList.remove('hidden');
+                modalWeightContent.innerHTML = drug.weightGuide.map(item => `<p>${item}</p>`).join('');
+            } else {
+                modalWeightSection.classList.add('hidden');
+            }
+
+            // Table Headers
+            modalTableHeader.innerHTML = drug.tableHeaders.map((th, idx) => `
+                <th class="p-3 ${idx < drug.tableHeaders.length - 1 ? 'border-r border-slate-200' : ''}">${th}</th>
+            `).join('');
+
+            // Table Rows
+            modalTableBody.innerHTML = drug.dosingRows.map(row => {
+                let col2 = row.loading || '-';
+                let col3 = row.maintenance || '-';
+                let col4 = row.notes || null;
+
+                return `
+                    <tr class="hover:bg-teal-50/30 transition-colors">
+                        <td class="p-3 font-bold text-slate-800 border-r border-slate-200 whitespace-nowrap bg-slate-50/60">${row.crcl}</td>
+                        <td class="p-3 text-slate-700 border-r border-slate-200">${col2}</td>
+                        <td class="p-3 text-slate-700 ${col4 ? 'border-r border-slate-200' : ''}">${col3}</td>
+                        ${col4 ? `<td class="p-3 text-slate-600 text-xs">${col4}</td>` : ''}
+                    </tr>
+                `;
+            }).join('');
+
+            // Administration content
+            modalAdminContent.innerHTML = drug.administration.map(item => `<p>${item}</p>`).join('');
+
+            // Storage content
+            modalStorageContent.innerHTML = drug.storage.map(item => `<p>${item}</p>`).join('');
+
+            // Special notes
+            if (drug.notes && drug.notes.length > 0) {
+                modalNotesSection.classList.remove('hidden');
+                modalNotesContent.innerHTML = drug.notes.map(n => `<p>• ${n}</p>`).join('');
+            } else {
+                modalNotesSection.classList.add('hidden');
+            }
+
+            // Alert Box for specific high-risk drugs
+            if (drug.id === 'colistin' || drug.id === 'vancomycin' || drug.id === 'amphotericin-b') {
+                modalAlertBox.classList.remove('hidden');
+                if (drug.id === 'colistin') modalAlertText.innerHTML = "<strong>ข้อควรระวัง Colistin:</strong> คำนวณขนาดยาในหน่วย mg ของ CBA (Colistin Base Activity) และต้องให้ Loading Dose 300 mg ในผู้ป่วยวิกฤต";
+                if (drug.id === 'vancomycin') modalAlertText.innerHTML = "<strong>ข้อควรระวัง Vancomycin:</strong> ใช้น้ำหนัก Actual Body Weight (ABW) และหยด drip ไม่เกิน 10 mg/min เพื่อป้องกัน Red Man Syndrome และแนะนำทำ TDM";
+                if (drug.id === 'amphotericin-b') modalAlertText.innerHTML = "<strong>ข้อควรระวัง Amphotericin B:</strong> ต้องผสมด้วย D5W เท่านั้น! ห้ามใช้น้ำเกลือ NSS และควรให้ Premedication (Hydration + Para + CPM) เสมอ";
+            } else {
+                modalAlertBox.classList.add('hidden');
+            }
+
+            // Show Modal
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close Modal on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
