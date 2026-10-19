@@ -28,11 +28,149 @@ a.card:hover{border-color:var(--accent)}
 .note{font-size:.85rem;color:var(--mute)}
 footer{margin-top:28px;font-size:.82rem;color:var(--mute);border-top:1px solid var(--line);padding-top:14px}
 a{color:var(--accent)}
+
+:root{--teal:#0f766e;--tealb:#e0f2ef;--seg:#eef1f5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--teal:#3fb8a8;--tealb:#14332f;--seg:#222a35}}
+:root[data-theme="dark"]{--teal:#3fb8a8;--tealb:#14332f;--seg:#222a35}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0}
+.tabs button{flex:1;min-width:130px;padding:9px 12px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;cursor:pointer;font:inherit}
+.tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:14px;padding:0 16px}
+.th{display:flex;gap:12px;align-items:center;padding:16px 0 12px}
+.ic{width:44px;height:44px;border-radius:12px;background:var(--tealb);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex:none}
+.th h2{margin:0;font-size:1.15rem}.th p{margin:0;color:var(--mute);font-size:.9rem}
+.prog{display:flex;align-items:center;gap:12px;padding:8px 0 10px;border-top:1px solid var(--line)}
+.bar{flex:1;height:7px;background:var(--seg);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .2s}
+.prog span{font-size:.85rem;font-weight:600;color:var(--mute);white-space:nowrap}
+.warn{font-size:.85rem;color:var(--mute);margin:0 0 6px}
+.row{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.qn{width:24px;height:24px;border-radius:50%;background:var(--seg);color:var(--mute);font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.row.done .qn{background:var(--teal);color:#fff}
+.qt small{display:block;color:var(--mute);font-size:.8rem}
+.seg{display:flex;flex-wrap:wrap;gap:4px;background:var(--seg);border:1px solid var(--line);border-radius:12px;padding:4px;justify-content:flex-end}
+.pill{position:relative;cursor:pointer}.pill input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.pill span{display:flex;gap:6px;align-items:center;padding:7px 14px;border-radius:9px;border:2px solid transparent;font-weight:600;font-size:.92rem}
+.pill i{font-style:normal;font-size:.75rem;background:var(--line);border-radius:99px;padding:0 7px;color:var(--mute)}
+.pill input:checked+span{background:var(--card);border-color:var(--teal);color:var(--teal)}
+.pill input:checked+span i{background:var(--teal);color:#fff}
+.pill input:focus-visible+span{outline:2px solid var(--accent)}
+@media (max-width:640px){.row{grid-template-columns:28px 1fr}.seg{grid-column:1 / -1;justify-content:flex-start}}
+.foot{position:sticky;bottom:0;background:var(--card);border-top:2px solid var(--line);padding:10px 0 8px;margin-top:6px;border-radius:0 0 14px 14px}
+.fr{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.sc{min-width:74px;text-align:center;background:var(--seg);border:1px solid var(--line);border-radius:12px;padding:4px 10px}
+.sc b{display:block;font-size:1.7rem;line-height:1.2}.sc small{color:var(--mute);font-size:.75rem}
+.rs{flex:1;min-width:140px}.rs small{color:var(--mute);display:block;font-size:.8rem}.rs b{font-size:1.05rem}
+.btn{padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;font:inherit;font-weight:600}
+.btn.p{background:var(--teal);border-color:var(--teal);color:#fff}
+.bands{display:grid;gap:8px;margin-top:10px}
+.bands div{text-align:center;border-radius:10px;padding:6px 4px;background:var(--seg);color:var(--mute);font-size:.82rem;font-weight:600;border:1px solid transparent}
+.bands div small{display:block;font-weight:400}
+.bands div.on{background:var(--tealb);color:var(--teal);border-color:var(--teal)}
 </style>
 </head>
 <body>
 <main>
-<p><a href="index.html">← กลับหน้าหลัก</a></p><div class="hero"><span class="badge wip">กำลังจัดทำ</span><h1>Assessment algorithm</h1><p class="sub">แนวทางและขั้นตอนการประเมินอาการไม่พึงประสงค์จากการใช้ยา</p></div><h2>เนื้อหา</h2><p>หน้านี้อยู่ระหว่างจัดทำ <span class="ph">[ใส่เนื้อหาของหัวข้อนี้]</span></p><footer>⚠ เครื่องมือและข้อมูลในเว็บนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ<br><span lang="en">A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.</span><br>เว็บนี้เก็บสถิติการเข้าชมแบบไม่ระบุตัวตนด้วย GoatCounter โดยไม่ใช้คุกกี้ และไม่เก็บข้อมูลผู้ป่วย</footer>
+<p><a href="index.html">← กลับหน้าหลัก</a></p>
+<div class="hero"><span class="badge ok">พร้อมใช้งาน</span><h1>Assessment algorithm</h1><p class="sub">เครื่องมือประเมินอาการไม่พึงประสงค์จากการใช้ยา · เลือกคำตอบแล้วคะแนนจะคำนวณให้อัตโนมัติ</p></div>
+<div class="tabs" id="tabs"></div>
+<div id="tool"></div>
+<p class="note" id="ref"></p>
+<p class="note">คำแปลภาษาไทยจัดทำเพื่อความสะดวกในการใช้งาน ควรตรวจสอบกับต้นฉบับก่อนใช้จริง คะแนนเป็นเครื่องมือช่วยประเมิน ไม่ใช่การวินิจฉัย และต้องใช้ร่วมกับดุลยพินิจทางคลินิก</p>
+<script>
+var YN=function(a,b,c){return [['ใช่',a],['ไม่ใช่',b],['ไม่ทราบ',c]]};
+var YN2=function(a,b){return [['ใช่',a],['ไม่ใช่',b]]};
+var TOOLS=[
+{name:'Naranjo\'s algorithm',sub:'ประเมินความน่าจะเป็นที่อาการไม่พึงประสงค์เกิดจากยาที่สงสัย (Naranjo ADR probability scale)',
+ref:'Naranjo CA, et al. A method for estimating the probability of adverse drug reactions. Clin Pharmacol Ther 1981;30(2):239-245.',
+bands:[{l:'Doubtful',r:'≤ 0',res:'Doubtful (ไม่น่าใช่)',t:function(s){return s<=0}},{l:'Possible',r:'1 – 4',res:'Possible (อาจเป็นไปได้)',t:function(s){return s>=1&&s<=4}},{l:'Probable',r:'5 – 8',res:'Probable (น่าจะเป็นไปได้)',t:function(s){return s>=5&&s<=8}},{l:'Definite',r:'≥ 9',res:'Definite (แน่นอน)',t:function(s){return s>=9}}],
+items:[
+{q:'มีรายงานยืนยันการเกิด ADR นี้มาก่อนหรือไม่?',e:'Previous conclusive reports',o:YN(1,0,0)},
+{q:'อาการเกิดขึ้นหลังจากได้รับยาที่สงสัยหรือไม่?',e:'Event appeared after the drug was given',o:YN(2,-1,0)},
+{q:'อาการดีขึ้นเมื่อหยุดยาหรือให้ยาต้านเฉพาะหรือไม่?',e:'Improved after discontinuation or specific antagonist',o:YN(1,0,0)},
+{q:'อาการเกิดขึ้นซ้ำเมื่อได้รับยาเดิมเข้าไปใหม่หรือไม่?',e:'Reappeared on re-administration',o:YN(2,-1,0)},
+{q:'มีสาเหตุอื่นที่ทำให้เกิดอาการนี้ได้เองหรือไม่?',e:'Alternative causes',o:YN(-1,2,0)},
+{q:'อาการเกิดขึ้นอีกหรือไม่เมื่อให้ยาหลอก (placebo)?',e:'Reaction on placebo',o:YN(-1,1,0)},
+{q:'ตรวจพบยาในระดับที่เป็นพิษหรือไม่?',e:'Toxic drug concentration (blood or other fluids)',o:YN(1,0,0)},
+{q:'อาการรุนแรงขึ้นเมื่อเพิ่มขนาดยา หรือลดลงเมื่อลดขนาดยาหรือไม่?',e:'Dose-response relationship',o:YN(1,0,0)},
+{q:'ผู้ป่วยเคยมีอาการลักษณะนี้เมื่อได้รับยาเดิมหรือยาใกล้เคียงกันหรือไม่?',e:'Similar reaction in previous exposure',o:YN(1,0,0)},
+{q:'อาการไม่พึงประสงค์ได้รับการยืนยันด้วยหลักฐานเชิงประจักษ์หรือไม่?',e:'Confirmed by objective evidence',o:YN(1,0,0)}]},
+{name:'DRESS score (RegiSCAR)',sub:'ประเมินความน่าจะเป็นของ DRESS (Drug reaction with eosinophilia and systemic symptoms)',
+note:'ข้อที่ยังไม่ได้ตอบจะนับเป็น 0 คะแนน แต่บางข้อตามเกณฑ์ "ไม่มี/ไม่ทราบ" ให้ -1 จึงควรตอบให้ครบทุกข้อก่อนแปลผล',
+ref:'Kardaun SH, et al. Variability in the clinical pattern of cutaneous side-effects of drugs with systemic symptoms: does a DRESS syndrome really exist? Br J Dermatol 2013;169(5):1071-1080 (RegiSCAR).',
+bands:[{l:'No case',r:'< 2',res:'No case (ไม่เข้าเกณฑ์ DRESS)',t:function(s){return s<2}},{l:'Possible',r:'2 – 3',res:'Possible case (อาจเป็น)',t:function(s){return s>=2&&s<=3}},{l:'Probable',r:'4 – 5',res:'Probable case (น่าจะเป็น)',t:function(s){return s>=4&&s<=5}},{l:'Definite',r:'> 5',res:'Definite case (แน่นอน)',t:function(s){return s>5}}],
+items:[
+{q:'ไข้ ≥ 38.5 °C',e:'Fever',o:[['ไม่มี/ไม่ทราบ',-1],['มี',0]]},
+{q:'ต่อมน้ำเหลืองโต (≥ 2 ตำแหน่ง ขนาด > 1 ซม.)',e:'Enlarged lymph nodes',o:[['ไม่มี/ไม่ทราบ',0],['มี',1]]},
+{q:'Eosinophilia',e:'ถ้า WBC < 4,000/µL ให้ใช้เปอร์เซ็นต์',o:[['ไม่มี (< 700/µL หรือ < 10%)',0],['700-1,499/µL หรือ 10-19.9%',1],['≥ 1,500/µL หรือ ≥ 20%',2]]},
+{q:'Atypical lymphocytes',o:[['ไม่มี/ไม่ทราบ',0],['มี',1]]},
+{q:'ผื่นกินพื้นที่ผิวกาย > 50% (BSA)',e:'Skin rash extent',o:[['ไม่ใช่/ไม่ทราบ',0],['ใช่',1]]},
+{q:'ลักษณะผื่นเข้าได้กับ DRESS',e:'อย่างน้อย 2 ใน 4: หน้าบวม, infiltrated papules, purpura, psoriasiform desquamation',o:[['ไม่',-1],['ไม่ทราบ',0],['ใช่',1]]},
+{q:'ผลชิ้นเนื้อ (biopsy) เข้าได้กับ DRESS',o:[['ไม่เข้า',-1],['เข้าได้/ไม่ได้ทำ',0]]},
+{q:'อวัยวะภายในที่เกี่ยวข้อง',e:'ตับ, ไต, กล้ามเนื้อ/หัวใจ, ตับอ่อน, อื่น ๆ',o:[['ไม่มี',0],['1 อวัยวะ',1],['≥ 2 อวัยวะ',2]]},
+{q:'อาการหายช้า ≥ 15 วัน',e:'ถ้ายังติดตามไม่ครบ 15 วัน คะแนนข้อนี้อาจเปลี่ยนภายหลัง',o:[['ไม่/ไม่ทราบ',-1],['ใช่',0]]},
+{q:'ตัดสาเหตุอื่นแล้ว',e:'ตรวจ ANA, blood culture, serology HAV/HBV/HCV, Chlamydia/Mycoplasma อย่างน้อย 3 รายการ และไม่พบผลบวก',o:[['ไม่/ไม่ทราบ',0],['ใช่',1]]}]},
+{name:'SCORTEN',sub:'ประเมินความเสี่ยงการเสียชีวิตของผู้ป่วย SJS/TEN จากปัจจัยเสี่ยง 7 ข้อ (ข้อละ 1 คะแนน)',
+ref:'Bastuji-Garin S, et al. SCORTEN: a severity-of-illness score for toxic epidermal necrolysis. J Invest Dermatol 2000;115(2):149-153.',
+bands:[{l:'0 – 1 คะแนน',r:'3.2%',res:'อัตราเสียชีวิตที่คาดการณ์ 3.2%',t:function(s){return s<=1}},{l:'2 คะแนน',r:'12.1%',res:'อัตราเสียชีวิตที่คาดการณ์ 12.1%',t:function(s){return s==2}},{l:'3 คะแนน',r:'35.3%',res:'อัตราเสียชีวิตที่คาดการณ์ 35.3%',t:function(s){return s==3}},{l:'4 คะแนน',r:'58.3%',res:'อัตราเสียชีวิตที่คาดการณ์ 58.3%',t:function(s){return s==4}},{l:'≥ 5 คะแนน',r:'90%',res:'อัตราเสียชีวิตที่คาดการณ์ 90%',t:function(s){return s>=5}}],
+items:[
+{q:'อายุ ≥ 40 ปี',o:YN2(1,0)},
+{q:'มีมะเร็งหรือมะเร็งเม็ดเลือดร่วมด้วย',e:'Associated malignancy',o:YN2(1,0)},
+{q:'อัตราการเต้นของหัวใจ ≥ 120 ครั้ง/นาที',o:YN2(1,0)},
+{q:'พื้นที่ผิวหนังที่หลุดลอกเมื่อแรกรับ > 10% BSA',e:'Epidermal detachment',o:YN2(1,0)},
+{q:'Serum urea > 10 mmol/L',e:'BUN > 28 mg/dL',o:YN2(1,0)},
+{q:'Serum glucose > 14 mmol/L',e:'> 252 mg/dL',o:YN2(1,0)},
+{q:'Serum bicarbonate < 20 mmol/L',o:YN2(1,0)}]},
+{name:'EuroSCAR (AGEP)',sub:'เกณฑ์ประเมิน AGEP (Acute generalized exanthematous pustulosis) ของ EuroSCAR',
+note:'ข้อที่ยังไม่ได้ตอบจะนับเป็น 0 คะแนน แต่บางข้อ (เริ่มเฉียบพลัน, อาการหาย) ให้คะแนนลบเมื่อตอบ "ไม่ใช่" จึงควรตอบให้ครบ',
+ref:'Sidoroff A, et al. Acute generalized exanthematous pustulosis (AGEP): a clinical reaction pattern / EuroSCAR validation score. Br J Dermatol 2001;144(6):1203-1208.',
+bands:[{l:'No AGEP',r:'≤ 0',res:'No AGEP (ไม่เข้าเกณฑ์)',t:function(s){return s<=0}},{l:'Possible',r:'1 – 4',res:'Possible AGEP (อาจเป็น)',t:function(s){return s>=1&&s<=4}},{l:'Probable',r:'5 – 7',res:'Probable AGEP (น่าจะเป็น)',t:function(s){return s>=5&&s<=7}},{l:'Definite',r:'8 – 12',res:'Definite AGEP (แน่นอน)',t:function(s){return s>=8}}],
+items:[
+{q:'ตุ่มหนอง (Pustules)',e:'ลักษณะผื่น',o:[['Typical',2],['Compatible',1],['ข้อมูลไม่พอ',0]]},
+{q:'ผื่นแดง (Erythema)',e:'ลักษณะผื่น',o:[['Typical',2],['Compatible',1],['ข้อมูลไม่พอ',0]]},
+{q:'การกระจายและรูปแบบ (Distribution/pattern)',e:'ลักษณะผื่น',o:[['Typical',2],['Compatible',1],['ข้อมูลไม่พอ',0]]},
+{q:'ผิวลอกหลังตุ่มหนอง (Post-pustular desquamation)',o:[['มี',1],['ไม่มี/ข้อมูลไม่พอ',0]]},
+{q:'มีการเกี่ยวข้องของเยื่อบุ (Mucosal involvement)',o:[['มี',-2],['ไม่มี',0]]},
+{q:'เริ่มเป็นเฉียบพลัน ภายใน ≤ 10 วัน (Acute onset)',o:[['ใช่',0],['ไม่ใช่',-2]]},
+{q:'อาการหายภายใน ≤ 15 วัน (Resolution)',o:[['ใช่',0],['ไม่ใช่',-4]]},
+{q:'ไข้ ≥ 38 °C',o:YN2(1,0)},
+{q:'Neutrophils (PMN) ≥ 7,000/µL',o:YN2(1,0)},
+{q:'ผลชิ้นเนื้อ (Histology)',e:'พยาธิวิทยา',o:[['เป็นโรคอื่น',-10],['ไม่ได้ทำ/ไม่เป็นตัวแทน',0],['Exocytosis ของ neutrophils',1],['Non-spongiform pustule(s) + papillary edema หรือ spongiform pustule(s) ไม่มี papillary edema',2],['Spongiform pustule(s) + papillary edema',3]]}]}
+];
+var cur=0;
+function badge(s){return (s>0?'+':'')+s}
+function calc(){var rows=document.querySelectorAll('#tool .row'),t=0,n=0,T=TOOLS[cur];
+ rows.forEach(function(r){var c=r.querySelector('input:checked');r.classList.toggle('done',!!c);if(c){n++;t+=parseInt(c.value,10)}});
+ document.getElementById('pb').style.width=(100*n/rows.length)+'%';
+ document.getElementById('pt').textContent='ตอบแล้ว '+n+' จาก '+rows.length+' ข้อ';
+ document.getElementById('sc').textContent=t;
+ var hit=null;document.querySelectorAll('#bands div').forEach(function(d,i){var on=T.bands[i].t(t);d.className=on?'on':'';if(on)hit=T.bands[i]});
+ document.getElementById('rs').textContent=hit?hit.res:'';
+ document.getElementById('inc').textContent=n<rows.length?'(ยังตอบไม่ครบ)':'';
+ return {t:t,n:n,total:rows.length,res:hit?hit.res:''}}
+function show(i){cur=i;var T=TOOLS[i];
+ document.querySelectorAll('#tabs button').forEach(function(b,k){b.className=k===i?'on':''});
+ var h='<div class="box"><div class="th"><div class="ic">📋</div><div><h2>'+T.name+'</h2><p>'+T.sub+'</p></div></div>';
+ h+='<div class="prog"><div class="bar"><i id="pb"></i></div><span id="pt"></span></div>';
+ if(T.note)h+='<p class="warn">'+T.note+'</p>';
+ T.items.forEach(function(it,k){h+='<div class="row"><div class="qn">'+(k+1)+'</div><div class="qt">'+it.q+(it.e?'<small>'+it.e+'</small>':'')+'</div><div class="seg">';
+  it.o.forEach(function(o){h+='<label class="pill"><input type="radio" name="q'+k+'" value="'+o[1]+'"><span>'+o[0]+'<i>'+badge(o[1])+'</i></span></label>'});
+  h+='</div></div>'});
+ h+='<div class="foot"><div class="fr"><div class="sc"><b id="sc">0</b><small>คะแนน</small></div><div class="rs"><small>ผลการประเมิน <span id="inc"></span></small><b id="rs"></b></div><button type="button" class="btn" id="reset">ล้างคำตอบ</button><button type="button" class="btn p" id="copy">คัดลอกผล</button></div>';
+ h+='<div class="bands" id="bands" style="grid-template-columns:repeat('+T.bands.length+',1fr)">'+T.bands.map(function(b){return '<div>'+b.l+'<small>'+b.r+'</small></div>'}).join('')+'</div></div></div>';
+ document.getElementById('tool').innerHTML=h;
+ document.getElementById('ref').textContent='อ้างอิง: '+T.ref;
+ document.getElementById('tool').onchange=calc;
+ document.getElementById('reset').onclick=function(){show(cur)};
+ document.getElementById('copy').onclick=function(){var r=calc(),b=this;
+  var txt=T.name+': '+r.t+' คะแนน, '+r.res+' (ตอบ '+r.n+'/'+r.total+' ข้อ) · '+new Date().toLocaleDateString('th-TH');
+  var done=function(){b.textContent='คัดลอกแล้ว ✓';setTimeout(function(){b.textContent='คัดลอกผล'},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){window.prompt('คัดลอกข้อความนี้',txt)})}else{window.prompt('คัดลอกข้อความนี้',txt)}};
+ calc()}
+document.getElementById('tabs').innerHTML=TOOLS.map(function(T,i){return '<button type="button" data-i="'+i+'">'+T.name+'</button>'}).join('');
+document.getElementById('tabs').onclick=function(e){var i=e.target.getAttribute('data-i');if(i!==null)show(+i)};
+show(0);
+</script>
+<footer>⚠ เครื่องมือและข้อมูลในเว็บนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ<br><span lang="en">A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.</span><br>เว็บนี้เก็บสถิติการเข้าชมแบบไม่ระบุตัวตนด้วย GoatCounter โดยไม่ใช้คุกกี้ และไม่เก็บข้อมูลผู้ป่วย</footer>
 </main>
 <script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
