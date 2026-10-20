@@ -46,7 +46,7 @@ h2{font-size:1rem;margin:0 0 4px}
 <div><h1 id="t"></h1><p class="sub" id="st"></p></div>
 
 </header>
-<div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button><button id="tfq"></button><button id="tmr"></button><button id="ths"></button><button id="tst"></button><button id="tpp"></button><button id="tla"></button><button id="toi"></button></div>
+<div class="tabs"><button id="tbl"></button><button id="tae"></button><button id="tns"></button><button id="tsf"></button><button id="tfq"></button><button id="tmr"></button><button id="ths"></button><button id="tst"></button><button id="tpp"></button><button id="tla"></button><button id="toi"></button><button id="tic"></button></div>
 <div class="card warn" id="disc"></div>
 <div class="card">
 <h2 id="h1s"></h2>
@@ -242,6 +242,21 @@ r_op_intra:'Same structural group: intra-group cross-reactivity is the more comm
 r_op_bz:'Possible risk: benzomorphans share some structural features with phenanthrenes (morphine), so cross-reactivity may occur; use with caution',
 r_op_lo:'Different structural group: cross-reactivity is low (structure clearly different)',
 ref11:'Source: opioid cross-reactivity risk by chemical structure (reference table), with chemical classes from Powell MZ, Mueller SW, Reynolds PM. Assessment of opioid cross-reactivity and provider perceptions in hospitalized patients with reported opioid allergies. Ann Pharmacother 2019;53(11):1117-1123. Nalbuphine, sufentanil, remifentanil and alfentanil are placed as in the reference table; buprenorphine appears under phenanthrenes in the original classification. The source does not distinguish reaction type or severity: for a severe or immediate reaction, consult an allergist. Not an official practice guideline.'});
+var IC=mk({GA:'Ioxitalamate meglumine sodium (Telebrix)|Iopamidol (Iopamiro, Isovue) *|Iodixanol (Visipaque) *|Iomeprol (Iomeron)|Ioversol (Optiray) *|Iohexol (Omnipaque)|Iopromide (Ultravist) *',GB:'Iobitridol (Xenetix)|Ioxaglate meglumine sodium (Hexabrix)',GC:'Diatrizoate (amidotrizoate) meglumine sodium (Gastrografin)|Diatrizoate (amidotrizoate) meglumine (Cystografin)',GU:'Iothalamate meglumine (Conray)|Iopanoic acid|Iotroxic acid|Metrizoate|Ioxilan (Oxilan)',GD:'Gadobenate dimeglumine (MultiHance) *|Gadoteric acid (Dotarem) *|Gadoxetate disodium (Primovist) *'},'c');
+Object.assign(CL,{GA:['Group A','Group A (iodinated)'],GB:['Group B','Group B (iodinated)'],GC:['Group C','Group C (iodinated)'],GU:['Not grouped','Iodinated, not placed in a group'],GD:['Gadolinium','Gadolinium-based (non-iodinated)']});
+function rule12(a,t){
+ if(a.cls==='GD'||t.cls==='GD')return['no','r_icm_gd'];
+ if(document.getElementById('sev').checked)return['hi','r_icm_sev'];
+ if(a.cls!=='GU'&&a.cls===t.cls)return['hi','r_icm_same'];
+ if(a.cls==='GU'||t.cls==='GU')return['mo','r_icm_u'];
+ return['mo','r_icm_diff'];}
+Object.assign(L.en,{tic:'Contrast media',t12:'Iodinated Contrast Media (ICM) Allergy Checker',st12:'Select the culprit contrast medium and the reaction severity',sev12:SEVTXT,
+r_icm_gd:'No cross-reactivity between gadolinium-based and iodinated contrast media (per source); a possible alternative if contrast imaging is still needed',
+r_icm_sev:'Severe reaction: avoid all iodinated contrast media. Alternatives: gadolinium-based contrast, another imaging method, or CT without contrast. If an ICM is essential, change to another ICM or group with close monitoring and follow-up',
+r_icm_same:'Same group as the culprit (similar core structure, high chance of cross-allergy): avoid',
+r_icm_diff:'Different group (different structure): may be chosen together with premedication and close monitoring',
+r_icm_u:'Not placed in a cross-reactivity group in the source: cross-reactivity cannot be excluded; if the agent is necessary, use premedication and close monitoring',
+ref12:'Source: Roi Et Hospital ADR Monitoring Center, algorithm for management of suspected iodinated contrast media allergy (2 Jan 2024). * = stocked at Roi Et Hospital. Groups follow the source: Group A (ioxitalamate, iopamidol, iodixanol, iomeprol, ioversol, iohexol, iopromide; all except ioxitalamate share an N-(2,3-dihydroxypropyl)carbamoyl side chain), Group B (iobitridol, ioxaglate), Group C (amidotrizoate; diatrizoate is the same compound). Evidence for cross-allergy among ICM is fairly weak and awaits further studies. Mild reaction with prior use tolerated or no data: may be true allergy or pseudoallergy; use premedication or avoid the whole group, and if an ICM is necessary choose one with lower osmolality together with premedication. High-osmolality agents cause anaphylactoid reactions more easily than low-osmolality agents. Seafood allergy is not a contraindication, but ICM allergy is reported 2 to 3 times more often in these patients: use with care. Risk factors: for immediate reactions, a previous moderate or severe immediate reaction or asthma; for delayed reactions, a previous reaction to ICM or allergy to many agents. Hospital premedication protocol: prednisolone 5 mg 10 tablets at 13, 7 and 1 hours before the scan; cetirizine 10 mg 1 tablet and famotidine 20 mg 1 tablet at 13 and 1 hours before. A corticosteroid given less than 6 hours before contrast does not prevent the reaction.'});
 var lang="en",sel=[],RK={no:0,lo:1,mo:2,hi:3};
 function rule(a,t){
  if(a.g&&a.g===t.g)return["hi","r_same"];
@@ -253,10 +268,10 @@ function rule(a,t){
 function track(p){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,title:p,event:true})}catch(e){}}
 function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function render(){
- var D={bl:DB,ae:E,ns:N,sf:S,fq:FQ,mr:MR,hs:HS,st:ST,pp:PP,la:LA,oi:OI}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4,fq:rule5,mr:rule6,hs:rule7,st:rule8,pp:rule9,la:rule10,oi:rule11}[grp];
+ var D={bl:DB,ae:E,ns:N,sf:S,fq:FQ,mr:MR,hs:HS,st:ST,pp:PP,la:LA,oi:OI,ic:IC}[grp],rule={bl:ruleB,ae:rule2,ns:rule3,sf:rule4,fq:rule5,mr:rule6,hs:rule7,st:rule8,pp:rule9,la:rule10,oi:rule11,ic:rule12}[grp];
  var T=L[lang],i=lang==="th"?0:1,qv=document.getElementById("q").value.toLowerCase();
  document.documentElement.lang=lang;
- var s={bl:'',ae:'2',ns:'3',sf:'4',fq:'5',mr:'6',hs:'7',st:'8',pp:'9',la:'10',oi:'11'}[grp];document.getElementById('sevt').parentNode.style.display=grp==='oi'?'none':'';['fq','mr','hs','st','pp','la','oi'].forEach(function(g){var b=document.getElementById('t'+g);b.textContent=T['t'+g];b.className=grp===g?'on':''});document.getElementById('tns').textContent=T.tns;document.getElementById('tsf').textContent=T.tsf;document.getElementById('tns').className=grp==='ns'?'on':'';document.getElementById('tsf').className=grp==='sf'?'on':'';
+ var s={bl:'',ae:'2',ns:'3',sf:'4',fq:'5',mr:'6',hs:'7',st:'8',pp:'9',la:'10',oi:'11',ic:'12'}[grp];document.getElementById('sevt').parentNode.style.display=grp==='oi'?'none':'';['fq','mr','hs','st','pp','la','oi','ic'].forEach(function(g){var b=document.getElementById('t'+g);b.textContent=T['t'+g];b.className=grp===g?'on':''});document.getElementById('tns').textContent=T.tns;document.getElementById('tsf').textContent=T.tsf;document.getElementById('tns').className=grp==='ns'?'on':'';document.getElementById('tsf').className=grp==='sf'?'on':'';
  ["t","st","disc","h1s","h2s","sevt","ref"].forEach(function(k){var m={t:"t"+s,st:"st"+s,disc:"disc",h1s:"h1",h2s:"h2",sevt:"sev"+s,ref:"ref"+s};document.getElementById(k).textContent=T[m[k]]});
  document.getElementById("tbl").textContent=T.tbl;document.getElementById("tae").textContent=T.tae;
  document.getElementById("tbl").className=grp==="bl"?"on":"";document.getElementById("tae").className=grp==="ae"?"on":"";
@@ -285,7 +300,7 @@ document.getElementById("tbl").onclick=function(){grp="bl";sel=[];track('tab/bl'
 document.getElementById("tae").onclick=function(){grp="ae";sel=[];track('tab/ae');render()};
 document.getElementById('tns').onclick=function(){grp='ns';sel=[];track('tab/ns');render()};
 document.getElementById('tsf').onclick=function(){grp='sf';sel=[];track('tab/sf');render()};
-['fq','mr','hs','st','pp','la','oi'].forEach(function(g){document.getElementById('t'+g).onclick=function(){grp=g;sel=[];track('tab/'+g);render()}});
+['fq','mr','hs','st','pp','la','oi','ic'].forEach(function(g){document.getElementById('t'+g).onclick=function(){grp=g;sel=[];track('tab/'+g);render()}});
 render();
 </script>
 <script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
