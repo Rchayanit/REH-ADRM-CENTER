@@ -28,11 +28,66 @@ a.card:hover{border-color:var(--accent)}
 .note{font-size:.85rem;color:var(--mute)}
 footer{margin-top:28px;font-size:.82rem;color:var(--mute);border-top:1px solid var(--line);padding-top:14px}
 a{color:var(--accent)}
+
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 8px}
+.tools input{flex:1;min-width:200px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font:inherit}
+.sum{font-size:.9rem;color:var(--mute)}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+thead th{border-top:0;background:var(--bg);font-size:.88rem;color:var(--mute);white-space:nowrap}
+td.n,th.n{text-align:center;white-space:nowrap}
+td small{display:block;color:var(--mute)}
+.dl{display:inline-block;padding:7px 14px;border-radius:9px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.dl.off{background:var(--line);color:var(--mute);pointer-events:none}
+.ty{font-size:.75rem;font-weight:700;color:var(--mute);display:block;margin-top:3px}
+@media (max-width:700px){table{min-width:0}thead{display:none}tr{display:block;border-top:1px solid var(--line);padding:8px 4px}td{display:block;border:0;padding:4px 10px;text-align:left!important}td.n::before{content:attr(data-l) ": ";color:var(--mute)}}
 </style>
 </head>
 <body>
 <main>
-<p><a href="index.html">← กลับหน้าหลัก</a></p><div class="hero"><span class="badge wip">กำลังจัดทำ</span><h1>ADR type A</h1><p class="sub">อาการไม่พึงประสงค์ชนิด A (ขึ้นกับขนาดยาและคาดการณ์ได้)</p></div><h2>เนื้อหา</h2><p>หน้านี้อยู่ระหว่างจัดทำ <span class="ph">[ใส่เนื้อหาของหัวข้อนี้]</span></p><footer>⚠ เครื่องมือและข้อมูลในเว็บนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ<br><span lang="en">A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.</span><br>เว็บนี้เก็บสถิติการเข้าชมแบบไม่ระบุตัวตนด้วย GoatCounter โดยไม่ใช้คุกกี้ และไม่เก็บข้อมูลผู้ป่วย</footer>
+<p><a href="index.html">← กลับหน้าหลัก</a></p>
+<div class="hero"><span class="badge ok">พร้อมใช้งาน</span><h1>ADR type A</h1><p class="sub">อาการไม่พึงประสงค์ชนิด A (Augmented) · ตารางหัวข้อพร้อมเอกสารดาวน์โหลด</p>
+<p>ADR type A คืออาการไม่พึงประสงค์ที่เกี่ยวข้องกับฤทธิ์ทางเภสัชวิทยาของยา มักขึ้นกับขนาดยา คาดการณ์ได้ พบบ่อย และมักมีอัตราการเสียชีวิตต่ำ การปรับขนาดยาหรือเฝ้าระวังอย่างเหมาะสมช่วยป้องกันหรือลดความรุนแรงได้</p></div>
+<p class="note"><span class="ph">หัวข้อในตารางด้านล่างเป็นตัวอย่าง และยังไม่มีไฟล์ให้ดาวน์โหลด ให้แก้รายการในไฟล์ให้ตรงกับเอกสารของศูนย์ฯ ก่อนเผยแพร่</span></p>
+<div class="tools"><input type="search" id="q" placeholder="ค้นหาหัวข้อ / ชื่อยา"><span class="sum" id="sum"></span></div>
+<div class="tw"><table><thead><tr><th class="n">#</th><th>หัวข้อ</th><th>คำอธิบาย</th><th class="n">เอกสาร</th><th class="n">จำนวนดาวน์โหลด</th></tr></thead><tbody id="tb"></tbody></table></div>
+<p class="note">จำนวนดาวน์โหลดแสดงตามสถิติของ GoatCounter เป็นค่าประมาณ (ผู้ใช้ที่ใช้ส่วนขยายบล็อกโฆษณาอาจไม่ถูกนับ) ระบบนับเฉพาะจำนวนครั้งที่กดดาวน์โหลด ไม่เก็บข้อมูลผู้ใช้</p>
+<script>
+var CNT='https://reh-adrm.goatcounter.com/counter/';
+// แก้รายการที่นี่: id = ชื่อสั้นภาษาอังกฤษไม่ซ้ำกัน, f = ที่อยู่ไฟล์ เช่น 'docs/hypoglycemia.pdf' (เว้นว่างถ้ายังไม่มีไฟล์)
+var DOCS=[
+{id:'hypoglycemia',t:'ภาวะน้ำตาลในเลือดต่ำจากยา',e:'Drug-induced hypoglycemia',d:'พบได้จากยาเบาหวาน เช่น insulin และกลุ่ม sulfonylureas เมื่อขนาดยาสูงเกินหรือกินอาหารไม่สม่ำเสมอ',f:''},
+{id:'anticoagulant-bleeding',t:'เลือดออกจากยาต้านการแข็งตัวของเลือด',e:'Anticoagulant-related bleeding',d:'เป็นผลจากฤทธิ์ของยา เช่น warfarin และยากลุ่ม DOACs ขึ้นกับขนาดยา ปฏิกิริยาระหว่างยา และการทำงานของไต',f:''},
+{id:'hyperkalemia',t:'ภาวะโพแทสเซียมในเลือดสูงจากยา',e:'Drug-induced hyperkalemia',d:'พบจากยา เช่น ACEI/ARB, spironolactone และ trimethoprim โดยเฉพาะในผู้ป่วยที่การทำงานของไตลดลง',f:''},
+{id:'nephrotoxicity',t:'พิษต่อไตจากยา',e:'Drug-induced nephrotoxicity',d:'เช่น aminoglycosides, vancomycin, NSAIDs และสารทึบรังสี ควรติดตามการทำงานของไตและปรับขนาดยาตามความเหมาะสม',f:''},
+{id:'qt-prolongation',t:'ภาวะ QT prolongation จากยา',e:'Drug-induced QT prolongation',d:'ยาหลายกลุ่มทำให้ช่วง QT ยาวขึ้น เสี่ยงต่อภาวะหัวใจเต้นผิดจังหวะ ควรระวังเมื่อใช้ร่วมกันหลายตัวหรือมีอิเล็กโทรไลต์ผิดปกติ',f:''},
+{id:'nsaid-gi-bleeding',t:'เลือดออกในทางเดินอาหารจาก NSAIDs',e:'NSAID-related GI bleeding',d:'เกิดจากฤทธิ์ยับยั้งการสร้างสารป้องกันเยื่อบุกระเพาะอาหาร เสี่ยงสูงขึ้นในผู้สูงอายุและผู้ที่ใช้ยาต้านการแข็งตัวของเลือดร่วมด้วย',f:''},
+{id:'serotonin-syndrome',t:'Serotonin syndrome',e:'Serotonin syndrome',d:'เกิดจากการมีระดับ serotonin มากเกินไป มักพบเมื่อใช้ยาที่เพิ่ม serotonin หลายตัวร่วมกันหรือเพิ่มขนาดยาเร็วเกินไป',f:''},
+{id:'narrow-ti',t:'พิษจากยาที่ช่วงการรักษาแคบ',e:'Toxicity of narrow therapeutic index drugs',d:'เช่น digoxin, lithium, phenytoin และ theophylline ระดับยาที่สูงเกินเล็กน้อยอาจเกิดพิษ ควรติดตามระดับยาในเลือด',f:''}
+];
+function ext(f){var p=f.split('.');return p.length>1?p.pop().toUpperCase():''}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function num(s){return parseInt(String(s).replace(/[^0-9]/g,''),10)||0}
+function sum(){var t=0,n=0;document.querySelectorAll('#tb .cnt').forEach(function(c){var v=c.getAttribute('data-v');if(v!==null){t+=+v}});
+ document.getElementById('sum').textContent='รวมดาวน์โหลดทั้งหมด (ที่โหลดได้): '+t+' ครั้ง'}
+function loadCount(id,el){
+ function tryp(p,next){fetch(CNT+encodeURIComponent(p)+'.json').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){el.textContent=j.count;el.setAttribute('data-v',num(j.count));sum()}).catch(next)}
+ tryp('download/'+id,function(){tryp('/download/'+id,function(){el.textContent='–'})})}
+function render(){var q=document.getElementById('q').value.toLowerCase(),h='',k=0;
+ DOCS.forEach(function(d){if(q&&(d.t+' '+d.e+' '+d.d).toLowerCase().indexOf(q)<0)return;k++;
+  var has=!!d.f;
+  h+='<tr><td class="n">'+k+'</td><td><b>'+esc(d.t)+'</b>'+(d.e?'<small>'+esc(d.e)+'</small>':'')+'</td><td>'+esc(d.d)+'</td><td class="n" data-l="เอกสาร">'+
+   (has?'<a class="dl" href="'+esc(d.f)+'" download data-id="'+esc(d.id)+'" data-t="'+esc(d.t)+'">ดาวน์โหลด</a><span class="ty">'+ext(d.f)+'</span>':'<span class="dl off">ยังไม่มีไฟล์</span>')+
+   '</td><td class="n" data-l="จำนวนดาวน์โหลด">'+(has?'<span class="cnt" id="c-'+esc(d.id)+'">…</span>':'–')+'</td></tr>'});
+ document.getElementById('tb').innerHTML=h||'<tr><td colspan="5">ไม่พบหัวข้อที่ค้นหา</td></tr>';
+ DOCS.forEach(function(d){var el=document.getElementById('c-'+d.id);if(el)loadCount(d.id,el)});sum()}
+document.getElementById('tb').addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.dl');if(!a)return;
+ try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:'download/'+a.getAttribute('data-id'),title:'Download: '+a.getAttribute('data-t'),event:true})}catch(x){}});
+document.getElementById('q').addEventListener('input',render);
+render();
+</script>
+<footer>⚠ เครื่องมือและข้อมูลในเว็บนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ<br><span lang="en">A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.</span><br>เว็บนี้เก็บสถิติการเข้าชมแบบไม่ระบุตัวตนด้วย GoatCounter โดยไม่ใช้คุกกี้ และไม่เก็บข้อมูลผู้ป่วย</footer>
 </main>
 <script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
