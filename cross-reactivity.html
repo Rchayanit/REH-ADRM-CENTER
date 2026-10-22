@@ -80,19 +80,16 @@ empty:"ยังไม่ได้เลือกยา",hi:"ความเส�
 r_same:"โครงสร้างข้างสาย R1 เหมือนกัน",r_sim:"โครงสร้างข้างสาย R1 คล้ายกัน",r_pen:"เป็นกลุ่มเพนิซิลลินด้วยกัน (วงแหวน β-lactam และแกนเดียวกัน) ควรหลีกเลี่ยง",
 r_cep:"R1 ต่างกัน โอกาสแพ้ข้ามต่ำ (โดยทั่วไปน้อยกว่า ~2%)",r_carb:"โอกาสแพ้ข้ามกับคาร์บาพีเนมต่ำ (โดยทั่วไปน้อยกว่า 1%)",r_atm:"อซตรีโอนัมไม่แพ้ข้ามกับ β-lactam อื่น ยกเว้นเซฟตาซิดีมและเซฟิซิม",
 r_sev:"แพ้รุนแรงแบบล่าช้า: หลีกเลี่ยงทั้งกลุ่ม β-lactam จนกว่าผู้เชี่ยวชาญประเมิน",
-ref:"อ้างอิงหลัก: 
-Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018 (ข้อมูลตัวอย่าง ต้องตรวจทานก่อนใช้จริง)"},
+ref:"อ้างอิงหลัก: Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018 (ข้อมูลตัวอย่าง ต้องตรวจทานก่อนใช้จริง)"},
 en:{t:"β-lactam Cross-reactivity Checker",st:"Select the drugs the patient is allergic to and see possible cross-reactive drugs",
-disc:"⚠ เครื่องมือนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ 
-⚠ A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.",
-h1:"1. Select the culprit drug(s)",h2:"3. Assessment",ph:"Search drug name (Thai/English)",
-sev:h2:"2. History of severe delayed reaction (SJS/TEN, DRESS, allergic nephritis, etc.)" : avoid the whole class and consult a specialist",
+disc:"⚠ เครื่องมือนี้จัดทำขึ้นเพื่อเป็นแนวคิดในการจัดการผู้ป่วยที่สงสัยแพ้ยาให้ปลอดภัยและไม่ให้เสียโอกาสการใช้ยา การนำไปใช้ควรพิจารณาปรับตามข้อมูลผู้ป่วย และความจำเป็นในการได้รับยาร่วมกับแพทย์ผู้รักษาเป็นสำคัญ A decision-support aid for healthcare professionals only; not a diagnosis and not a substitute for individual patient assessment or drug allergy testing.",
+h1:"1. Select the culprit drug(s)",h2:"2. Assessment",ph:"Search drug name (Thai/English)",
+sev:"History of severe delayed reaction (SJS/TEN, DRESS, allergic nephritis, etc.): avoid the whole class and consult a specialist",
 empty:"No drug selected yet",hi:"High risk",mo:"Moderate",lo:"Low",no:"Negligible",
 r_same:"Identical R1 side chain",r_sim:"Similar R1 side chain",r_pen:"Both penicillins (shared β-lactam ring and core): avoid",
 r_cep:"Dissimilar R1; cross-reactivity is low (generally under ~2%)",r_carb:"Cross-reactivity with carbapenems is low (generally under 1%)",r_atm:"Aztreonam does not cross-react with other β-lactams, except ceftazidime and cefixime",
 r_sev:"Severe delayed reaction: avoid all β-lactams until assessed by a specialist",
-ref:"Main references: 
-Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018. (Sample data; review before real use.)"}};
+ref:"Main references: Khan DA et al. Drug allergy: a 2022 practice parameter update. J Allergy Clin Immunol 2022; Zagursky RJ, Pichichero ME. J Allergy Clin Immunol Pract 2018. (Sample data; review before real use.)"}};
 var DB=D,ruleB=rule,grp="bl";
 var E=[["cbz","คาร์บามาซีพีน","Carbamazepine","AR"],["pht","ฟีนิทอยน์","Phenytoin","AR"],["fph","ฟอสฟีนิทอยน์","Fosphenytoin","AR"],["pb","ฟีโนบาร์บิทาล","Phenobarbital","AR"],["prm","ไพรมิโดน","Primidone","AR"],
 ["oxc","ออกซ์คาร์บาซีพีน","Oxcarbazepine","OX"],["esl","เอสลิคาร์บาซีพีน","Eslicarbazepine","OX"],["ltg","ลาโมไตรจีน","Lamotrigine","OT"],["zns","โซนิซาไมด์","Zonisamide","OT"],
@@ -113,8 +110,7 @@ r_ox:"โครงสร้างใกล้เคียงกับ carbamazep
 r_ot:"ลาโมไตรจีน/โซนิซาไมด์ มีรายงานแพ้ข้ามกับกลุ่มอะโรมาติกได้ (ความเสี่ยงปานกลาง) ใช้ด้วยความระมัดระวัง",
 r_na:"ไม่มีโครงสร้างอะโรมาติกที่เกี่ยวข้อง ไม่คาดว่าจะแพ้ข้าม แต่ผู้ป่วยอาจแพ้ยาตัวใหม่ได้เอง ควรติดตามอาการ",
 r_sev2:"เคยแพ้รุนแรง: หลีกเลี่ยงยากันชักกลุ่มอะโรมาติกทั้งหมด พิจารณายากลุ่มไม่ใช่อะโรมาติกและปรึกษาผู้เชี่ยวชาญ",
-ref2:"อ้างอิงหลัก: 
-CPIC guideline HLA genotype and carbamazepine/oxcarbazepine (Phillips EJ et al. Clin Pharmacol Ther 2018); CPIC guideline CYP2C9/HLA-B and phenytoin (Karnes JH et al. Clin Pharmacol Ther 2021) ตัวเลขแพ้ข้ามมาจากรายงานในวรรณกรรม ต้องตรวจเทียบต้นฉบับก่อนใช้จริง หมายเหตุ: ประชากรไทยมีความชุก HLA-B*15:02 สูง ควรพิจารณาตรวจก่อนเริ่ม carbamazepine ตามแนวทางที่เกี่ยวข้อง"});
+ref2:"อ้างอิงหลัก: CPIC guideline HLA genotype and carbamazepine/oxcarbazepine (Phillips EJ et al. Clin Pharmacol Ther 2018); CPIC guideline CYP2C9/HLA-B and phenytoin (Karnes JH et al. Clin Pharmacol Ther 2021) ตัวเลขแพ้ข้ามมาจากรายงานในวรรณกรรม ต้องตรวจเทียบต้นฉบับก่อนใช้จริง หมายเหตุ: ประชากรไทยมีความชุก HLA-B*15:02 สูง ควรพิจารณาตรวจก่อนเริ่ม carbamazepine ตามแนวทางที่เกี่ยวข้อง"});
 Object.assign(L.en,{tbl:"β-lactams",tae:"Aromatic anticonvulsants",t2:"Aromatic Anticonvulsant Cross-reactivity Checker",st2:"Select the drugs the patient is allergic to and see possible cross-reactive anticonvulsants",
 sev2:"History of severe reaction (SJS/TEN, DRESS): avoid all aromatic anticonvulsants and consult a specialist",
 r_ar:"Both are classic aromatic anticonvulsants (similar arene oxide metabolism); reported cross-reactivity roughly 40–80% depending on reaction type: avoid",
