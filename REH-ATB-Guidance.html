@@ -117,20 +117,7 @@
                     </select>
                 </div>
 
-                <!-- Quick Filter Kidney Function -->
-                <div class="hidden">
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">สภาวะไต (Renal Focus)</label>
-                    <select id="renal-filter" class="w-full py-2.5 px-3 bg-teal-50 border border-teal-200 text-teal-900 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm font-medium transition-all">
-                        <option value="ALL">แสดงทุกสภาวะไต</option>
-                        <option value="NORMAL">CrCl ปกติ (>80-90 mL/min)</option>
-                        <option value="MODERATE">CrCl ปานกลาง (30-50 mL/min)</option>
-                        <option value="SEVERE">CrCl ต่ำ (<30 mL/min)</option>
-                        <option value="HD">Hemodialysis (HD)</option>
-                        <option value="CAPD">CAPD</option>
-                        <option value="CRRT">CRRT / SLED</option>
-                    </select>
-                </div>
-            </div>
+</div>
 
             <!-- Category Pills Shortcuts -->
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 text-xs">
@@ -803,13 +790,11 @@
         // Global State variables
         let currentSearchQuery = "";
         let currentCategory = "ALL";
-        let currentRenalFilter = "ALL";
 
         // DOM Elements
         const searchInput = document.getElementById('search-input');
         const clearSearchBtn = document.getElementById('clear-search');
         const categoryFilter = document.getElementById('category-filter');
-        const renalFilter = document.getElementById('renal-filter');
         const drugListContainer = document.getElementById('drug-list-container');
         const emptyState = document.getElementById('empty-state');
         const totalCountEl = document.getElementById('total-drugs-count');
@@ -855,10 +840,6 @@
                 renderDrugCards();
             });
 
-            renalFilter.addEventListener('change', (e) => {
-                currentRenalFilter = e.target.value;
-                renderDrugCards();
-            });
         }
 
         function setCategory(cat) {
@@ -871,9 +852,7 @@
             searchInput.value = '';
             currentSearchQuery = '';
             currentCategory = 'ALL';
-            currentRenalFilter = 'ALL';
             categoryFilter.value = 'ALL';
-            renalFilter.value = 'ALL';
             clearSearchBtn.classList.add('hidden');
             renderDrugCards();
         }
@@ -890,23 +869,7 @@
                     drug.strength.toLowerCase().includes(currentSearchQuery) ||
                     drug.searchTerms.some(term => term.toLowerCase().includes(currentSearchQuery));
 
-                // Renal Filter Match (Checking if drug has rows matching renal keyword)
-                let matchRenal = true;
-                if (currentRenalFilter !== 'ALL') {
-                    const filterKey = currentRenalFilter;
-                    matchRenal = drug.dosingRows.some(row => {
-                        const crclText = row.crcl.toUpperCase();
-                        if (filterKey === 'HD') return crclText.includes('HD');
-                        if (filterKey === 'CAPD') return crclText.includes('CAPD');
-                        if (filterKey === 'CRRT') return crclText.includes('CRRT') || crclText.includes('SLED');
-                        if (filterKey === 'SEVERE') return crclText.includes('<10') || crclText.includes('<15') || crclText.includes('<20') || crclText.includes('15-29') || crclText.includes('10-25');
-                        if (filterKey === 'MODERATE') return crclText.includes('30') || crclText.includes('40') || crclText.includes('50') || crclText.includes('21-40') || crclText.includes('26-50');
-                        if (filterKey === 'NORMAL') return crclText.includes('>80') || crclText.includes('>50') || crclText.includes('≥60') || crclText.includes('≥80');
-                        return true;
-                    });
-                }
-
-                return matchCategory && matchSearch && matchRenal;
+                return matchCategory && matchSearch;
             });
 
             totalCountEl.textContent = filtered.length;
@@ -1068,5 +1031,6 @@
             }
         });
     </script>
+<script data-goatcounter="https://reh-adrm.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
