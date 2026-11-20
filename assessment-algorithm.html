@@ -136,6 +136,27 @@ items:[
 {q:'Neutrophils (PMN) ≥ 7,000/µL',o:YN2(1,0)},
 {q:'ผลชิ้นเนื้อ (Histology)',e:'พยาธิวิทยา',o:[['เป็นโรคอื่น',-10],['ไม่ได้ทำ/ไม่เป็นตัวแทน',0],['Exocytosis ของ neutrophils',1],['Non-spongiform pustule(s) + papillary edema หรือ spongiform pustule(s) ไม่มี papillary edema',2],['Spongiform pustule(s) + papillary edema',3]]}]}
 ];
+var SCI=[{q:'อายุ ≥ 40 ปี',o:YN2(1,0)},{q:'มีมะเร็งหรือมะเร็งเม็ดเลือดร่วมด้วย',e:'Associated malignancy',o:YN2(1,0)},{q:'อัตราการเต้นของหัวใจ ≥ 120 ครั้ง/นาที',o:YN2(1,0)},{q:'พื้นที่ผิวหนังที่หลุดลอก > 10% BSA',e:'Epidermal detachment',o:YN2(1,0)},{q:'Serum urea > 10 mmol/L',e:'BUN > 28 mg/dL',o:YN2(1,0)},{q:'Serum glucose > 14 mmol/L',e:'> 252 mg/dL',o:YN2(1,0)},{q:'Serum bicarbonate < 20 mmol/L',o:YN2(1,0)}];
+var RSB=[['0','1.9%'],['1','4.3%'],['2','8.7%'],['3','14%'],['4','23%'],['5','35.3%'],['6','54.5%'],['7','73.2%'],['8 – 9','86.1%']];
+TOOLS.push(
+{name:'Re-SCORTEN',sub:'ประเมินความเสี่ยงการเสียชีวิตของผู้ป่วย SJS/TEN: SCORTEN 7 ข้อ + RDW/Hb (ข้อละ 1 คะแนน ยกเว้น RDW/Hb = 2 คะแนน)',
+ note:'Re-SCORTEN = SCORTEN บวกอีก 2 คะแนน ถ้า RDW/Hb ≥ 1.19 (RDW เป็น % หารด้วย Hb เป็น g/dL) คะแนนสูงสุด 9 · ข้อมูลมาจากการศึกษาย้อนหลังในศูนย์เดียว ยังต้องการการตรวจสอบในกลุ่มประชากรอื่น',
+ ref:'Improvement of mortality prognostication in patients with epidermal necrolysis: the role of novel inflammatory markers and proposed revision of SCORTEN (Re-SCORTEN). JAMA Dermatol 2022 (n = 192, ศูนย์เดียว, ตรวจสอบภายในด้วย bootstrap) · SCORTEN ต้นฉบับ: Bastuji-Garin S, et al. J Invest Dermatol 2000;115(2):149-153',
+ bands:RSB.map(function(b,i){return{l:b[0]+' คะแนน',r:b[1],res:'อัตราเสียชีวิตที่คาดการณ์ '+b[1],t:i<8?function(s){return s==i}:function(s){return s>=8}}}),
+ gridcss:'repeat(auto-fit,minmax(64px,1fr))',
+ items:SCI.concat([{q:'RDW/Hb ≥ 1.19',e:'RDW (%) ÷ Hb (g/dL) · ข้อนี้ให้ 2 คะแนน',o:YN2(2,0)}])},
+{name:'Schumock & Thornton',sub:'ประเมินความสามารถในการป้องกันอาการไม่พึงประสงค์จากการใช้ยา (Preventability) · ตอบ "ใช่" อย่างน้อย 1 ข้อ = ป้องกันได้',
+ unit:'ข้อที่ตอบ "ใช่"',
+ ref:'Schumock GT, Thornton JP. Focusing on the preventability of adverse drug reactions. Hosp Pharm 1992;27:538.',
+ bands:[{l:'ตอบ "ไม่ใช่" ทุกข้อ',r:'0 ข้อ',res:'Not preventable (ป้องกันไม่ได้)',t:function(s){return s<=0}},{l:'ตอบ "ใช่" อย่างน้อย 1 ข้อ',r:'≥ 1 ข้อ',res:'Preventable (ป้องกันได้)',t:function(s){return s>=1}}],
+ items:[
+ {q:'ยาที่เกี่ยวข้องไม่เหมาะสมกับภาวะทางคลินิกของผู้ป่วยหรือไม่?',e:'Was the drug involved inappropriate for the patient\'s clinical condition?',o:YN2(1,0)},
+ {q:'ขนาดยา ทางให้ยา หรือความถี่ในการให้ยา ไม่เหมาะสมกับอายุ น้ำหนัก หรือโรคของผู้ป่วยหรือไม่?',e:'Was the dose, route, or frequency of administration inappropriate for the patient\'s age, weight, or disease state?',o:YN2(1,0)},
+ {q:'ไม่ได้ทำการติดตามระดับยา หรือการตรวจทางห้องปฏิบัติการที่จำเป็นหรือไม่?',e:'Was required therapeutic drug monitoring or other necessary laboratory test not performed?',o:YN2(1,0)},
+ {q:'ผู้ป่วยมีประวัติแพ้ หรือเคยเกิดปฏิกิริยาต่อยานี้มาก่อนหรือไม่?',e:'Was there a history of allergy or previous reaction to the drug?',o:YN2(1,0)},
+ {q:'มีอันตรกิริยาระหว่างยา (drug interaction) เกี่ยวข้องกับอาการนี้หรือไม่?',e:'Was a drug interaction involved in the reaction?',o:YN2(1,0)},
+ {q:'มีการบันทึกระดับยาในเลือดที่สูงถึงระดับเป็นพิษ (toxic serum drug concentration) หรือผลตรวจติดตามอื่นที่ผิดปกติหรือไม่?',e:'Was a toxic serum drug concentration (or laboratory monitoring test) documented?',o:YN2(1,0)},
+ {q:'การไม่ปฏิบัติตามแผนการรักษา (poor compliance) มีส่วนเกี่ยวข้องกับอาการนี้หรือไม่?',e:'Was poor compliance involved in the reaction?',o:YN2(1,0)}]});
 var cur=0;
 function badge(s){return (s>0?'+':'')+s}
 function calc(){var rows=document.querySelectorAll('#tool .row'),t=0,n=0,T=TOOLS[cur];
@@ -147,19 +168,23 @@ function calc(){var rows=document.querySelectorAll('#tool .row'),t=0,n=0,T=TOOLS
  document.getElementById('rs').textContent=hit?hit.res:'';
  document.getElementById('inc').textContent=n<rows.length?'(ยังตอบไม่ครบ)':'';
  return {t:t,n:n,total:rows.length,res:hit?hit.res:''}}
-function show(i){cur=i;var T=TOOLS[i];
+function show(i,saved){cur=i;var T=TOOLS[i];
  document.querySelectorAll('#tabs button').forEach(function(b,k){b.className=k===i?'on':''});
+ if(T.render){document.getElementById('ref').textContent='อ้างอิง: '+T.ref;T.render();return}
  var h='<div class="box"><div class="th"><div class="ic">📋</div><div><h2>'+T.name+'</h2><p>'+T.sub+'</p></div></div>';
  h+='<div class="prog"><div class="bar"><i id="pb"></i></div><span id="pt"></span></div>';
+ if(T.pre)h+=T.pre();
  if(T.note)h+='<p class="warn">'+T.note+'</p>';
- T.items.forEach(function(it,k){h+='<div class="row"><div class="qn">'+(k+1)+'</div><div class="qt">'+it.q+(it.e?'<small>'+it.e+'</small>':'')+'</div><div class="seg">';
-  it.o.forEach(function(o){h+='<label class="pill"><input type="radio" name="q'+k+'" value="'+o[1]+'"><span>'+o[0]+'<i>'+badge(o[1])+'</i></span></label>'});
+ var items=T.getItems?T.getItems():T.items;items.forEach(function(it,k){h+='<div class="row"><div class="qn">'+(k+1)+'</div><div class="qt">'+it.q+(it.e?'<small>'+it.e+'</small>':'')+'</div><div class="seg">';
+  it.o.forEach(function(o,oi){h+='<label class="pill"><input type="radio" name="q'+k+'" value="'+o[1]+'" data-o="'+oi+'"><span>'+o[0]+'<i>'+badge(o[1])+'</i></span></label>'});
   h+='</div></div>'});
- h+='<div class="foot"><div class="fr"><div class="sc"><b id="sc">0</b><small>คะแนน</small></div><div class="rs"><small>ผลการประเมิน <span id="inc"></span></small><b id="rs"></b></div><button type="button" class="btn" id="reset">ล้างคำตอบ</button><button type="button" class="btn p" id="copy">คัดลอกผล</button></div>';
- h+='<div class="bands" id="bands" style="grid-template-columns:repeat('+T.bands.length+',1fr)">'+T.bands.map(function(b){return '<div>'+b.l+'<small>'+b.r+'</small></div>'}).join('')+'</div></div></div>';
+ h+='<div class="foot"><div class="fr"><div class="sc"><b id="sc">0</b><small>'+(T.unit||'คะแนน')+'</small></div><div class="rs"><small>ผลการประเมิน <span id="inc"></span></small><b id="rs"></b></div><button type="button" class="btn" id="reset">ล้างคำตอบ</button><button type="button" class="btn p" id="copy">คัดลอกผล</button></div>';
+ h+='<div class="bands" id="bands" style="grid-template-columns:'+(T.gridcss||'repeat('+T.bands.length+',1fr)')+'">'+T.bands.map(function(b){return '<div>'+b.l+'<small>'+b.r+'</small></div>'}).join('')+'</div></div></div>';
  document.getElementById('tool').innerHTML=h;
  document.getElementById('ref').textContent='อ้างอิง: '+T.ref;
  document.getElementById('tool').onchange=calc;
+ if(saved){document.querySelectorAll('#tool .row').forEach(function(r,k){if(saved[k]!=null){var x=r.querySelector('input[data-o="'+saved[k]+'"]');if(x)x.checked=true}})}
+ if(T.bind)T.bind();
  document.getElementById('reset').onclick=function(){show(cur)};
  document.getElementById('copy').onclick=function(){var r=calc(),b=this;
   var txt=T.name+': '+r.t+' คะแนน, '+r.res+' (ตอบ '+r.n+'/'+r.total+' ข้อ) · '+new Date().toLocaleDateString('th-TH');
