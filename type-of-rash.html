@@ -1,4 +1,3 @@
-
 index.html
 100%
 <!DOCTYPE html>
@@ -782,6 +781,48 @@ index.html
             }
         ];
 
+        const LESION_IMAGES = {
+            macule: [
+                { src: 'images/lesion/macule-1.jpg', caption: 'Multiple brown macules are present on the dorsal hand (solar lentigines).', credit: 'Solar lentigines presenting as brown macules on the dorsum of the hand. Graphic 61452 Version 7.0. © 2010 Logical Images, Inc. Reproduced with permission from www.visualdx.com. Copyright VisualDx. © 2026 UpToDate, Inc. and/or its affiliates.' },
+                { src: 'images/lesion/macule-2.jpg', caption: 'Depigmented macular lesions in a patient with vitiligo.', credit: 'Vitiligo. Graphic 101356 Version 3.0. © 2015 VisualDx. Reproduced with permission from www.visualdx.com. Copyright VisualDx. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            bulla: [
+                { src: 'images/lesion/bulla-1.jpg', caption: 'Tense bulla on the heel (friction blister).', credit: 'Friction blister. © 2018 VisualDx.com. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            crust: [
+                { src: 'images/lesion/crust-1.jpg', caption: 'Crusted lesions in a patient with impetigo.', credit: 'Impetigo. © 2012 Logical Images, Inc. Reproduced with permission from www.visualdx.com. Copyright VisualDx. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            erosion: [
+                { src: 'images/lesion/erosion-1.jpg', caption: 'Multiple shallow erosions are present in areas of sloughed skin in this patient with toxic epidermal necrolysis.', credit: 'Erosions. © 2010 Logical Images, Inc. Reproduced with permission from www.visualdx.com. Copyright VisualDx. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            fissure: [
+                { src: 'images/lesion/fissure-1.jpg', caption: 'Chronic, hyperkeratotic, and fissured hand eczema in a 69-year-old male patient.', credit: 'Hyperkeratotic hand eczema. © University Erlangen, Department of Dermatology, www.dermis.net (DOIA). © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            excoriation: [
+                { src: 'images/lesion/excoriation-1.jpg', caption: 'Sharply demarcated erosions, ulcerations, and purpuric patches in a patient with anxiety disorder (psychogenic excoriation).', credit: 'Psychogenic excoriation. Graphic 61686 Version 7.0. Copyright © Bernard Cohen, MD, Dermatlas; http://www.dermatlas.org. © 2026 UpToDate, Inc. and/or its affiliates.' },
+                { src: 'images/lesion/excoriation-2.jpg', caption: 'Excoriated and lichenified lesions with postinflammatory hyperpigmentation; relative sparing of the less accessible scapular areas ("butterfly distribution").', credit: 'Psychogenic excoriations. Graphic 55043 Version 3.0. © 2026 UpToDate, Inc. and/or its affiliates.' },
+                { src: 'images/lesion/excoriation-3.jpg', caption: 'Linear excoriations (secondary to scratching).', credit: 'Excoriations. Graphic 73387 Version 6.0. © 2010 Logical Images, Inc. Reproduced with permission from www.visualdx.com. Copyright VisualDx. © 2026 UpToDate, Inc. and/or its affiliates.' },
+                { src: 'images/lesion/excoriation-4.jpg', caption: 'Multiple small skin excoriations from unremitting picking (chronic methamphetamine abuse).', credit: 'Skin excoriations in chronic methamphetamine abuse. Graphic 86746 Version 5.0. © 2012 Logical Images, Inc. Reproduced with permission from www.visualdx.com. Copyright VisualDx.' },
+                { src: 'images/lesion/excoriation-5.jpg', caption: 'Excoriations and sharply demarcated, superficial ulcerations on the face in pathologic skin picking.', credit: 'Psychogenic excoriations of the face. Graphic 66802 Version 2.0. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            lichenification: [
+                { src: 'images/lesion/lichenification-1.jpg', caption: 'Thickened skin with accentuated skin lines in a patient who chronically rubbed and scratched this area.', credit: 'Lichenification. Graphic 80745 Version 7.0. © 2010 Logical Images, Inc. Reproduced with permission from www.visualdx.com. Copyright VisualDx. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            keloid: [
+                { src: 'images/lesion/keloid-1.jpg', caption: 'A keloid scar with a butterfly shape on the shoulder.', credit: 'Keloid. Graphic 138767 Version 1.0. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            atrophy: [
+                { src: 'images/lesion/atrophy-1.jpg', caption: 'A shiny, atrophic plaque in the antecubital fossa with surrounding white and bright red curvilinear plaques (striae) — cutaneous atrophy caused by topical corticosteroids.', credit: 'Cutaneous atrophy caused by topical corticosteroids. © 2020 VisualDx.com. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            ecchymosis: [
+                { src: 'images/lesion/ecchymosis-1.jpg', caption: 'Distinct ecchymosis at the plantar surface of the midfoot after a tarsometatarsal (Lisfranc) injury.', credit: 'Plantar ecchymosis from tarsometatarsal (Lisfranc) injury. © 2026 UpToDate, Inc. and/or its affiliates.' },
+                { src: 'images/lesion/ecchymosis-2.jpg', caption: 'Ecchymosis 24 hours after a prairie rattlesnake bite in a 4-year-old child.', credit: 'Ecchymosis following prairie rattlesnake envenomation. Graphic 122496 Version 2.0. Reproduced with permission from Daniel E. Keyler, PharmD, FAACT. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+            hematoma: [
+                { src: 'images/lesion/hematoma-1.jpg', caption: 'Hematoma with surrounding ecchymoses at a surgical wound.', credit: 'Surgical wound hematoma. © 2026 UpToDate, Inc. and/or its affiliates.' }
+            ],
+        };
+
         function renderLesionGroups() {
             const wrap = document.getElementById('lesionGroups');
             LESION_GROUPS.forEach(group => {
@@ -799,8 +840,18 @@ index.html
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col';
 
+                    const pics = LESION_IMAGES[item.key] || [];
+                    if (pics.length) {
+                        GALLERY_DATA['les_' + item.key] = { title: item.name, images: pics };
+                        card.classList.add('cursor-pointer', 'hover:shadow-md', 'transition');
+                        card.title = 'คลิกเพื่อดูรูปขยายและที่มา';
+                        card.onclick = () => openGallery('les_' + item.key);
+                    }
+
+                    const media = document.createElement('div');
+                    media.className = 'relative';
                     const img = document.createElement('img');
-                    img.src = `images/lesion/${item.key}.jpg`;
+                    img.src = pics.length ? pics[0].src : `images/lesion/${item.key}.jpg`;
                     img.alt = item.name;
                     img.loading = 'lazy';
                     img.className = 'w-full aspect-[4/3] object-cover bg-slate-100';
@@ -831,7 +882,14 @@ index.html
                     desc.textContent = item.desc;
 
                     body.append(title, thai, desc);
-                    card.append(img, body);
+                    media.appendChild(img);
+                    if (pics.length > 1) {
+                        const badge = document.createElement('span');
+                        badge.className = 'absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full';
+                        badge.textContent = pics.length + ' รูป';
+                        media.appendChild(badge);
+                    }
+                    card.append(media, body);
                     grid.appendChild(card);
                 });
 
